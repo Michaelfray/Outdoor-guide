@@ -1,0 +1,6 @@
+# Textfiler lagras med LF i repot och checkas ut med datorns standard.
+* text=auto
+
+# ModelsBuilder skriver alltid LF. Behåll LF i arbetskopian också,
+# annars visas modellerna som ändrade efter varje uppstart.
+umbraco/models/*.cs text eol=lf
