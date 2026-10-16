@@ -1,0 +1,30 @@
+﻿omrade;nyckel;svenska;engelska;var_det_syns
+Trail;Trail.Length;Längd;Length;Ledsida, faktaruta
+Trail;Trail.Time;Tid;Time;Ledsida, faktaruta
+Trail;Trail.Hours;timmar;hours;Efter tiden i faktarutan
+Trail;Trail.Difficulty;Svårighetsgrad;Difficulty;Ledsida, faktaruta
+Trail;Trail.Difficulty.Easy;Lätt;Easy;Värde för svårighetsgrad
+Trail;Trail.Difficulty.Medium;Medel;Moderate;Värde för svårighetsgrad
+Trail;Trail.Difficulty.Hard;Svår;Hard;Värde för svårighetsgrad
+Trail;Trail.ChildFriendly;Barnvänlig;Child friendly;Ledsida, lista
+Trail;Trail.Loop;Rundslinga;Loop trail;Ledsida, faktaruta
+Trail;Trail.StartPoint;Startpunkt;Starting point;Ledsida, karta
+Trail;Trail.ShowOnMap;Visa på karta;Show on map;Ledsida, knapp
+Trail;Trail.Municipality;Kommun;Municipality;Ledsida, faktaruta
+Common;Common.Yes;Ja;Yes;Ja/nej-värden
+Common;Common.No;Nej;No;Ja/nej-värden
+Common;Common.ReadMore;Läs mer;Read more;Kort i listor
+Common;Common.Back;Tillbaka;Back;Länk tillbaka
+Municipality;Municipality.Trails;Leder i kommunen;Trails in the municipality;Kommunsida, rubrik
+Municipality;Municipality.Region;Region;Region;Kommunsida
+Municipality;Municipality.NoTrails;Det finns inga leder här än.;There are no trails here yet.;Kommunsida, tom lista
+Search;Search.Label;Sök;Search;Sökfält
+Search;Search.Placeholder;Sök led eller kommun;Search trail or municipality;Sökfält
+Search;Search.NoResults;Inga träffar;No results;Sökresultat
+Filter;Filter.Title;Filtrera;Filter;Lista över leder
+Filter;Filter.AllMunicipalities;Alla kommuner;All municipalities;Filter
+Filter;Filter.AllDifficulties;Alla svårighetsgrader;All difficulty levels;Filter
+Filter;Filter.OnlyChildFriendly;Bara barnvänliga;Child friendly only;Filter
+Menu;Menu.Label;Huvudmeny;Main menu;Toppmeny (finns i lärarens repo)
+Menu;Menu.Toggle;Visa eller dölj menyn;Show or hide the menu;Toppmeny (finns i lärarens repo)
+Footer;Footer.Contact;Kontakt;Contact;Sidfot
