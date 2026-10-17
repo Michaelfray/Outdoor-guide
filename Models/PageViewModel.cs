@@ -1,7 +1,7 @@
 ﻿using OutdoorGuide.Models;
 using Umbraco.Cms.Web.Common.PublishedModels;
 
-namespace OutdoorGuide;
+namespace OutdoorGuide.Models;
 
 public class PageViewModel<T> : IPageViewModel where T : class, IBase
 {
