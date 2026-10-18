@@ -1,8 +1,9 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Start>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<StartPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-<h1>@Model.Title</h1>
-<p>@Model.Intro</p>
+<h1>@Model.Content.Title</h1>
+<p>@Model.Content.Intro</p>

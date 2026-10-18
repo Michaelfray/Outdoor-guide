@@ -1,5 +1,5 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IBase>
+﻿@using OutdoorGuide.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
 @{
 	Layout = null;
 }
@@ -7,8 +7,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>@Model.Name</title>
-		<meta name="description" content="@Model.MetaDescription" />
+		<title>@Model.Content.Name</title>
+		<meta name="description" content="@Model.Content.MetaDescription" />
 	</head>
 
 	<body>
