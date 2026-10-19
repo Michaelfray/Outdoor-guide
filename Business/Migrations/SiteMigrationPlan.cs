@@ -12,7 +12,8 @@ namespace OutdoorGuide.Business.Migrations
         {
             From(string.Empty)
                 .To<AddBaseAndStart>("add-base-and-start")
-                .To<AddStartIntro>("add-start-intro");
+                .To<AddStartIntro>("add-start-intro")
+                .To<AddSettingsPage>("add-settings-page");
         }
     }
 }
