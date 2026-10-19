@@ -1,0 +1,42 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<Trail>
+
+@{
+	var municipality = Model.AncestorOrSelf<Municipality>();
+
+	string YesNo(bool value) => value
+		? Umbraco.GetDictionaryValueOrDefault("Common.Yes", "Yes")
+		: Umbraco.GetDictionaryValueOrDefault("Common.No", "No");
+}
+
+<dl class="trail-facts">
+	@if (Model.Length > 0)
+	{
+		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Length", "Length")</dt>
+		<dd>@Model.Length.ToString("0.#") km</dd>
+	}
+
+	@if (Model.Duration > 0)
+	{
+		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Time", "Time")</dt>
+		<dd>@Model.Duration.ToString("0.#") @Umbraco.GetDictionaryValueOrDefault("Trail.Hours", "hours")</dd>
+	}
+
+	@if (!string.IsNullOrEmpty(Model.Difficulty))
+	{
+		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Difficulty", "Difficulty")</dt>
+		<dd>@Umbraco.GetDictionaryValueOrDefault(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty)</dd>
+	}
+
+	<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.ChildFriendly", "Child friendly")</dt>
+	<dd>@YesNo(Model.ChildFriendly)</dd>
+
+	<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Loop", "Loop trail")</dt>
+	<dd>@YesNo(Model.Loop)</dd>
+
+	@if (municipality != null)
+	{
+		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Municipality", "Municipality")</dt>
+		<dd><a href="@municipality.Url()">@municipality.Name</a></dd>
+	}
+</dl>
