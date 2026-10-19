@@ -14,7 +14,14 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddBaseAndStart>("add-base-and-start")
                 .To<AddStartIntro>("add-start-intro")
                 .To<AddSettingsPage>("add-settings-page")
-                .To<AddRegionAndMunicipality>("add-region-and-municipality");;
+                .To<AddCommonDictionaryItems>("add-common-dictionary-items")
+                .To<AddMenuDictionaryItems>("add-menu-dictionary-items")
+                .To<AddFooterDictionaryItems>("add-footer-dictionary-items")
+                .To<AddTrailDictionaryItems>("add-trail-dictionary-items")
+                .To<AddMunicipalityDictionaryItems>("add-municipality-dictionary-items")
+                .To<AddSearchDictionaryItems>("add-search-dictionary-items")
+                .To<AddFilterDictionaryItems>("add-filter-dictionary-items")
+                .To<AddRegionAndMunicipality>("add-region-and-municipality");
         }
     }
 }
