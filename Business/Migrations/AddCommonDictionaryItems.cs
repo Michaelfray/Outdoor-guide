@@ -20,6 +20,7 @@ namespace OutdoorGuide.Business.Migrations
             ("Common.No", "Nej", "No"),
             ("Common.ReadMore", "Läs mer", "Read more"),
             ("Common.Back", "Tillbaka", "Back"),
+            ("Common.Language", "Välj språk", "Choose language"),
         ];
     }
 }
