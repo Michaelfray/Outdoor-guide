@@ -1,0 +1,40 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<Municipality>
+
+@{
+	var region = Model.AncestorOrSelf<Region>();
+	var trails = Model.Children<Trail>()?.Where(trail => trail.IsPublished()).ToList() ?? [];
+}
+
+@if (region != null)
+{
+	<p>
+		@Umbraco.GetDictionaryValueOrDefault("Municipality.Region", "Region"):
+		<a href="@region.Url()">@region.Name</a>
+	</p>
+}
+
+<section>
+	<h2>@Umbraco.GetDictionaryValueOrDefault("Municipality.Trails", "Trails in the municipality")</h2>
+
+	@if (trails.Count == 0)
+	{
+		<p>@Umbraco.GetDictionaryValueOrDefault("Municipality.NoTrails", "There are no trails here yet.")</p>
+	}
+	else
+	{
+		<ul>
+			@foreach (var trail in trails)
+			{
+				<li>
+					<h3>@trail.Name</h3>
+					@if (!string.IsNullOrEmpty(trail.Intro))
+					{
+						<p>@trail.Intro</p>
+					}
+					<a href="@trail.Url()">@Umbraco.GetDictionaryValueOrDefault("Common.ReadMore", "Read more")<span class="visually-hidden">: @trail.Name</span></a>
+				</li>
+			}
+		</ul>
+	}
+</section>
