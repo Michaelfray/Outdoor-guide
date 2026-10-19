@@ -21,7 +21,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddMunicipalityDictionaryItems>("add-municipality-dictionary-items")
                 .To<AddSearchDictionaryItems>("add-search-dictionary-items")
                 .To<AddFilterDictionaryItems>("add-filter-dictionary-items")
-                .To<AddRegionAndMunicipality>("add-region-and-municipality");
+                .To<AddRegionAndMunicipality>("add-region-and-municipality")
+                .To<AddDifficultyDataType>("add-difficulty-data-type");
         }
     }
 }
