@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&display=swap");
+
+:root {
+  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+
+  --color-forest: #1f4d3a;
+  --color-forest-dark: #123326;
+  --color-forest-light: #2e6650;
+  --color-text: #1c2a22;
+  --color-text-muted: #4f5b53;
+  --color-bg: #f4f2ec;
+  --color-surface: #ffffff;
+  --color-border: #d9d4c7;
+  --color-border-strong: #b9b3a4;
+  --color-divider: #ece8de;
+  --color-moss: #eef3ef;
+  --color-lichen: #d6e4db;
+  --color-accent: #c2531b;
+  --color-accent-dark: #a2441a;
+  --color-sunset: #f0a35e;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
