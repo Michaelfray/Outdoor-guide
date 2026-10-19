@@ -20,7 +20,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddTrailDictionaryItems>("add-trail-dictionary-items")
                 .To<AddMunicipalityDictionaryItems>("add-municipality-dictionary-items")
                 .To<AddSearchDictionaryItems>("add-search-dictionary-items")
-                .To<AddFilterDictionaryItems>("add-filter-dictionary-items");
+                .To<AddFilterDictionaryItems>("add-filter-dictionary-items")
+                .To<AddRegionAndMunicipality>("add-region-and-municipality");
         }
     }
 }
