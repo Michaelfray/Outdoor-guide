@@ -5,13 +5,14 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="@System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName">
 	<head>
 		<title>@Model.Content.Name</title>
 		<meta name="description" content="@Model.Content.MetaDescription" />
 	</head>
 
 	<body>
+		@await Html.PartialAsync("languageSwitcher", Model.Content)
 		<div>
 			@RenderBody()
 		</div>

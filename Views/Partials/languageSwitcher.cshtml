@@ -1,0 +1,27 @@
+@using System.Globalization
+@inherits UmbracoViewPage<IPublishedContent>
+
+@{
+	var currentCulture = CultureInfo.CurrentCulture.Name;
+}
+
+<nav aria-label="@Umbraco.GetDictionaryValueOrDefault("Common.Language", "Language")">
+	<ul>
+		@foreach (var culture in Model.Cultures.Keys)
+		{
+			// Visa bara språk där sidan är publicerad, annars blir länken en 404
+			if (!Model.IsPublished(culture))
+			{
+				continue;
+			}
+
+			var cultureInfo = new CultureInfo(culture);
+			var name = cultureInfo.TextInfo.ToTitleCase(cultureInfo.Parent.NativeName);
+			var isCurrent = string.Equals(culture, currentCulture, StringComparison.OrdinalIgnoreCase);
+
+			<li>
+				<a href="@Model.Url(culture)" lang="@culture" hreflang="@culture" aria-current="@(isCurrent ? "page" : null)">@name</a>
+			</li>
+		}
+	</ul>
+</nav>
