@@ -11,7 +11,8 @@ namespace OutdoorGuide.Business.Migrations
         public SiteMigrationPlan() : base("OutdoorGuide")
         {
             From(string.Empty)
-                .To<AddBaseAndStart>("add-base-and-start");
+                .To<AddBaseAndStart>("add-base-and-start")
+                .To<AddStartIntro>("add-start-intro");
         }
     }
 }
