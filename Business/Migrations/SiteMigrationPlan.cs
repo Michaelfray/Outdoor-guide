@@ -12,7 +12,14 @@ namespace OutdoorGuide.Business.Migrations
         {
             From(string.Empty)
                 .To<AddBaseAndStart>("add-base-and-start")
-                .To<AddStartIntro>("add-start-intro");
+                .To<AddStartIntro>("add-start-intro")
+                .To<AddCommonDictionaryItems>("add-common-dictionary-items")
+                .To<AddMenuDictionaryItems>("add-menu-dictionary-items")
+                .To<AddFooterDictionaryItems>("add-footer-dictionary-items")
+                .To<AddTrailDictionaryItems>("add-trail-dictionary-items")
+                .To<AddMunicipalityDictionaryItems>("add-municipality-dictionary-items")
+                .To<AddSearchDictionaryItems>("add-search-dictionary-items")
+                .To<AddFilterDictionaryItems>("add-filter-dictionary-items");
         }
     }
 }
