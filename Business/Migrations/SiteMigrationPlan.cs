@@ -13,6 +13,7 @@ namespace OutdoorGuide.Business.Migrations
             From(string.Empty)
                 .To<AddBaseAndStart>("add-base-and-start")
                 .To<AddStartIntro>("add-start-intro")
+                .To<AddSettingsPage>("add-settings-page")
                 .To<AddCommonDictionaryItems>("add-common-dictionary-items")
                 .To<AddMenuDictionaryItems>("add-menu-dictionary-items")
                 .To<AddFooterDictionaryItems>("add-footer-dictionary-items")
