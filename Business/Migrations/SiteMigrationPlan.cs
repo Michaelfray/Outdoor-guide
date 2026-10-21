@@ -26,6 +26,7 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddTrail>("add-trail")
                 .To<AddCommonDictionaryItems>("add-common-dictionary-items-2")
                 .To<AddTestContent>("add-test-content")
+                .To<AddReportDictionaryItems>("add-report-dictionary-items")
                 .To<AddActivityDataType>("add-activity-data-type")
                 .To<AddTrailActivity>("add-trail-activity")
                 .To<AddActivityDictionaryItems>("add-activity-dictionary-items");
