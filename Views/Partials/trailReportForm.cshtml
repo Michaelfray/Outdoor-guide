@@ -1,0 +1,69 @@
+@using OutdoorGuide.Controllers
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<Trail>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var status = Context.Request.Query[TrailReportStatus.QueryKey].ToString();
+	var sent = status == TrailReportStatus.Sent;
+
+	string? message = status switch
+	{
+		TrailReportStatus.Sent => Text("Report.Sent", "Thank you! Your report has been sent."),
+		TrailReportStatus.Invalid => Text("Report.Invalid", "The report was not sent. Choose a condition and write a comment."),
+		TrailReportStatus.Expired => Text("Report.Expired", "The page was open for too long, so the report was not sent. Please try again."),
+		_ => null,
+	};
+
+	var input = TrailReportTempData.Take(TempData);
+}
+
+<section id="@TrailReportStatus.Anchor" class="trail-report" aria-labelledby="trail-report-heading">
+	<h2 id="trail-report-heading">@Text("Report.Title", "Report trail condition")</h2>
+
+	@if (message != null)
+	{
+		<p id="trail-report-status" class="trail-report-status trail-report-status-@status" role="@(sent ? "status" : "alert")" tabindex="-1">@message</p>
+		<script>document.getElementById('trail-report-status').focus();</script>
+	}
+
+	@if (!sent)
+	{
+		<p>@Text("Report.Intro", "Walked this trail recently? Tell us what it is like.")</p>
+
+		using (Html.BeginUmbracoForm<TrailReportSurfaceController>(nameof(TrailReportSurfaceController.Submit)))
+		{
+			<p>
+				<label for="trail-report-condition">@Text("Report.Condition", "Condition")</label>
+				<select id="trail-report-condition" name="condition" required>
+					<option value="">@Text("Report.Condition.Choose", "Choose a condition")</option>
+					@foreach (var value in TrailConditionValues.All)
+					{
+						<option value="@value" selected="@(input?.Condition == value)">@Text(TrailConditionValues.DictionaryKey(value), value)</option>
+					}
+				</select>
+			</p>
+
+			<p>
+				<label for="trail-report-comment">@Text("Report.Comment", "Comment")</label>
+				<textarea id="trail-report-comment" name="comment" rows="4" required
+						  maxlength="@TrailReport.CommentMaxLength">@input?.Comment</textarea>
+			</p>
+
+			<p>
+				<label for="trail-report-name">@Text("Report.Name", "Name") (@Text("Report.Optional", "optional"))</label>
+				<input id="trail-report-name" name="name" type="text"
+					   maxlength="@TrailReport.NameMaxLength" autocomplete="name" value="@input?.Name" />
+			</p>
+
+			@* Honungsfälla: utanför skärmen i stället för display:none, så att bottar som hoppar över dolda fält ändå fyller i den *@
+			<div style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+				<label for="trail-report-website">Website</label>
+				<input id="trail-report-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+			</div>
+
+			<button type="submit">@Text("Report.Send", "Send report")</button>
+		}
+	}
+</section>
