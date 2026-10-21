@@ -28,3 +28,17 @@ Filter;Filter.OnlyChildFriendly;Bara barnvänliga;Child friendly only;Filter
 Menu;Menu.Label;Huvudmeny;Main menu;Toppmeny (finns i lärarens repo)
 Menu;Menu.Toggle;Visa eller dölj menyn;Show or hide the menu;Toppmeny (finns i lärarens repo)
 Footer;Footer.Contact;Kontakt;Contact;Sidfot
+Report;Report.Title;Rapportera ledens skick;Report trail condition;Formulär på ledsidan, rubrik
+Report;Report.Intro;Har du gått leden nyligen? Berätta hur den ser ut.;Walked this trail recently? Tell us what it is like.;Formulär, ingress
+Report;Report.Condition;Skick;Condition;Formulär, etikett
+Report;Report.Condition.Choose;Välj skick;Choose a condition;Formulär, första valet i listan
+Report;Report.Condition.Good;Bra;Good;Värde för skick
+Report;Report.Condition.Obstacle;Hinder på leden;Obstacle on the trail;Värde för skick
+Report;Report.Condition.Closed;Avstängd;Closed;Värde för skick
+Report;Report.Comment;Kommentar;Comment;Formulär, etikett
+Report;Report.Name;Namn;Name;Formulär, etikett
+Report;Report.Optional;frivilligt;optional;Formulär, efter Namn
+Report;Report.Send;Skicka rapport;Send report;Formulär, knapp
+Report;Report.Sent;Tack! Din rapport har skickats.;Thank you! Your report has been sent.;Formulär, efter skickat
+Report;Report.Invalid;Rapporten skickades inte. Välj skick och skriv en kommentar.;The report was not sent. Choose a condition and write a comment.;Formulär, fel
+Report;Report.Expired;Sidan var öppen för länge, så rapporten skickades inte. Försök igen.;The page was open for too long, so the report was not sent. Please try again.;Formulär, fel
