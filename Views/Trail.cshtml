@@ -9,4 +9,5 @@
 @if (Model.Content is Trail trail)
 {
 	@await Html.PartialAsync("trailFacts", trail)
+	@await Html.PartialAsync("trailReportForm", trail)
 }
