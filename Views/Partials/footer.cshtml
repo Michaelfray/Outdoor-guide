@@ -1,0 +1,26 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<IPageViewModel>
+
+<footer class="site-footer py-5">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-6">
+                <a class="site-footer-brand" href="@(Model.StartPage?.Url() ?? "/")">Friluftsguiden</a>
+                <p class="mb-0">@Umbraco.GetDictionaryValueOrDefault("Footer.Tagline", "Trails in Stockholm County.")
+                </p>
+            </div>
+            <nav class="col-md-6" aria-label="@Umbraco.GetDictionaryValueOrDefault("Footer.Links", "Links")">
+                <ul class="list-unstyled d-flex flex-wrap gap-3 justify-content-md-end mb-0">
+                    @foreach (var item in Model.MenuItems)
+                    {
+                        <li><a href="@item.Url()">@item.Name</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <p class="small mt-4 mb-0">
+            @Umbraco.GetDictionaryValueOrDefault("Footer.WeatherSource", "Weather from")
+            <a href="https://open-meteo.com/">Open-Meteo</a>
+        </p>
+    </div>
+</footer>
