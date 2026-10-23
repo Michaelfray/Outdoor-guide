@@ -31,7 +31,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddTrailActivity>("add-trail-activity")
                 .To<AddActivityDictionaryItems>("add-activity-dictionary-items")
                 .To<AddMenuPages>("add-menu-pages")
-                .To<AddMenuContent>("add-menu-content");
+                .To<AddMenuContent>("add-menu-content")
+                .To<AddMoreFooterDictionaryItems>("add-more-footer-dictionary-items");
         }
     }
 }
