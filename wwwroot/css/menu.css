@@ -1,0 +1,76 @@
+/* The menu bar: dark green with white links */
+.site-menu {
+  background: var(--color-forest);
+}
+
+/* The logo uses the heading font */
+.site-menu-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+/* Menu links: white, with room for a thick underline */
+.site-menu .nav-link {
+  color: #fff;
+  text-underline-offset: 0.4rem;
+  text-decoration-thickness: 2px;
+}
+
+/* Underline on hover, on keyboard focus, on the current page and while the mega menu is open */
+.site-menu .nav-link:hover,
+.site-menu .nav-link:focus-visible,
+.site-menu .nav-link.active,
+.site-menu .nav-link.show {
+  color: #fff;
+  text-decoration-line: underline;
+}
+
+/* The mega menu: a white panel straight under the menu bar */
+.site-megamenu {
+  margin-top: 0;
+  padding: 1.5rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: var(--color-surface);
+}
+
+/* Level 2 headings in the mega menu (Vandring, Paddling ...) */
+.site-megamenu-heading {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* Level 3 links in the mega menu (Dagsturer ...): green and underlined, as in the design */
+.site-megamenu .dropdown-item {
+  padding: 0.25rem 0;
+  color: var(--color-forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: normal; /* let long names wrap instead of overflowing */
+}
+
+/* Bootstrap gives dropdown items a grey background on hover; we only darken the text */
+.site-megamenu .dropdown-item:hover,
+.site-megamenu .dropdown-item:focus-visible {
+  background: none;
+  color: var(--color-forest-dark);
+}
+
+/* The language switcher: the languages side by side instead of as a bullet list */
+.site-menu-lang ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-menu-lang a {
+  color: #fff;
+}
