@@ -1,0 +1,99 @@
+@using OutdoorGuide.Models
+@* The menu gets the whole page model, so it can reach MenuItems and StartPage *@
+@inherits UmbracoViewPage<IPageViewModel>
+
+@{
+    // The page the visitor is on right now
+    var current = Model.Content;
+
+    // The ids of the current page and all its ancestors, e.g. "-1,1050,1063,1071"
+    var currentPath = current.Path.Split(',');
+
+    // A menu item is "current" if it is the page we are on, or one of its ancestors.
+    // The start page is the ancestor of every page, so it only counts as current on itself.
+    bool IsCurrent(IPublishedContent item) =>
+        item.Id == current.Id || (item.Id != Model.StartPage?.Id && currentPath.Contains(item.Id.ToString()));
+}
+
+@* navbar-expand-lg: full menu on large screens, collapsed behind a button on small ones.
+   data-bs-theme="dark" gives Bootstrap's light-on-dark colours, e.g. a white toggler icon *@
+<nav class="navbar navbar-expand-lg site-menu" data-bs-theme="dark"
+     aria-label="@Umbraco.GetDictionaryValueOrDefault("Menu.Label", "Main menu")">
+    <div class="container">
+
+        @* The logo links to the start page in the current language (/ or /en), not just "/" *@
+        <a class="navbar-brand site-menu-brand" href="@(Model.StartPage?.Url() ?? "/")">Friluftsguiden</a>
+
+        @* The hamburger button, only visible on small screens. It opens and closes #site-menu-items *@
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-menu-items"
+                aria-controls="site-menu-items" aria-expanded="false"
+                aria-label="@Umbraco.GetDictionaryValueOrDefault("Menu.Toggle", "Show or hide the menu")">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        @* Everything inside this div is hidden behind the button on small screens *@
+        <div class="collapse navbar-collapse" id="site-menu-items">
+            <ul class="navbar-nav me-auto">
+
+                @* Level 1: the pages the editor picks in Settings (Leder, Platser, Säsongstips, Om oss, Kontakt) *@
+                @foreach (var item in Model.MenuItems)
+                {
+                    var isCurrent = IsCurrent(item);
+
+                    // Every level 1 item is a plain link, except Leder, which gets the mega menu
+                    if (item is not TrailsPage)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link@(isCurrent ? " active" : null)" href="@item.Url()"
+                               aria-current="@(isCurrent ? "page" : null)">@item.Name</a>
+                        </li>
+                        continue;
+                    }
+
+                    @* position-static lets the dropdown stretch across the whole menu bar instead of just under the button *@
+                    <li class="nav-item dropdown position-static">
+
+                        @* A button, not a link: clicking it opens the mega menu *@
+                        <button class="nav-link dropdown-toggle@(isCurrent ? " active" : null)" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">@item.Name</button>
+
+                        @* The mega menu panel. data-bs-theme="light" makes it white, even though the menu bar is dark *@
+                        <div class="dropdown-menu w-100 site-megamenu" data-bs-theme="light">
+                            <div class="container">
+                                <div class="row gy-3">
+
+                                    @* Level 2: one column per activity (Vandring, Paddling, Cykel, Vinter) *@
+                                    @foreach (var activity in item.Children().OfType<ActivityPage>())
+                                    {
+                                        @* col-lg-3: four columns side by side on large screens, stacked on small ones *@
+                                        <div class="col-lg-3">
+                                            <a class="site-megamenu-heading" href="@activity.Url()">@activity.Name</a>
+                                            <ul class="list-unstyled mb-0">
+
+                                                @* Level 3: the pages under each activity, e.g. Dagsturer *@
+                                                @foreach (var category in activity.Children().OfType<TrailCategory>())
+                                                {
+                                                    var isCategoryCurrent = IsCurrent(category);
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="@category.Url()"
+                                                           aria-current="@(isCategoryCurrent ? "page" : null)">@category.Name</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            @* The language switcher, on the right of the menu bar *@
+            <div class="site-menu-lang">
+                @await Html.PartialAsync("languageSwitcher", Model.Content)
+            </div>
+        </div>
+    </div>
+</nav>
