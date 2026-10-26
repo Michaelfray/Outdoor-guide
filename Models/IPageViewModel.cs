@@ -5,8 +5,9 @@ namespace OutdoorGuide.Models;
 
 public interface IPageViewModel
 {
-    IBase Content { get; }
+    IPublishedContent Content { get; }
     Start? StartPage { get; }
     IReadOnlyList<IPublishedContent> MenuItems { get; }
+    string MetaDescription { get; }
     string UrlSegment { get; }
 }
