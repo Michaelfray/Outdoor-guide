@@ -17,4 +17,6 @@ public class PageViewModel<T> : IPageViewModel where T : class, IPublishedConten
     public string MetaDescription => (Content as IBase)?.MetaDescription ?? string.Empty;
 
     public string UrlSegment { get; set; } = string.Empty;
+    /// <summary>Sidor utan värde, och sidor utan Base, räknas som ALL.</summary>
+    public string MetaRobots => (Content as IBase)?.MetaRobots == MetaRobotsValues.None ? MetaRobotsValues.None : MetaRobotsValues.All;
 }

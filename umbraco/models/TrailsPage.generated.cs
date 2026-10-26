@@ -64,5 +64,13 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("metaDescription")]
 		public virtual string MetaDescription => global::Umbraco.Cms.Web.Common.PublishedModels.Base.GetMetaDescription(this, _publishedValueFallback);
+
+		///<summary>
+		/// Meta Robots: NONE ber sökmotorer att inte indexera sidan, och sidan hoppas över i sitemapen.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("metaRobots")]
+		public virtual string MetaRobots => global::Umbraco.Cms.Web.Common.PublishedModels.Base.GetMetaRobots(this, _publishedValueFallback);
 	}
 }
