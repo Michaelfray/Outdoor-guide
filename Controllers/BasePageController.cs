@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using OutdoorGuide.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
-using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace OutdoorGuide.Controllers;
 
 public abstract class BasePageController<TContent, TViewModel>(PageControllerDependencies dependencies)
     : RenderController(dependencies.Logger, dependencies.ViewEngine, dependencies.UmbracoContextAccessor)
-    where TContent : class, IBase
+    where TContent : class, IPublishedContent
     where TViewModel : PageViewModel<TContent>
 {
     protected PageControllerDependencies Dependencies { get; } = dependencies;
     protected abstract TViewModel Build(TContent page);
 
-    
+
     // GET: BasePageController
     public override IActionResult Index()
     {
@@ -30,7 +30,7 @@ public abstract class BasePageController<TContent, TViewModel>(PageControllerDep
     }
 
 
-    private string GetUrlSegment(IBase content)
+    private string GetUrlSegment(IPublishedContent content)
     {
         string culture = Dependencies.VariationContextAccessor.VariationContext?.Culture ?? string.Empty;
         bool isDraft = Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext)
@@ -40,4 +40,3 @@ public abstract class BasePageController<TContent, TViewModel>(PageControllerDep
     }
 
 }
-
