@@ -10,4 +10,5 @@ public interface IPageViewModel
     IReadOnlyList<IPublishedContent> MenuItems { get; }
     string MetaDescription { get; }
     string UrlSegment { get; }
+    string MetaRobots { get; }
 }
