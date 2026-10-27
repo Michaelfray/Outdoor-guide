@@ -1,13 +1,11 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
 <h1>@Model.Content.Name</h1>
-@if (Model.Content is Trail trail)
-{
-	@await Html.PartialAsync("trailFacts", trail)
-	@await Html.PartialAsync("trailReportForm", trail)
-}
+@await Html.PartialAsync("trailFacts", Model.Content)
+@await Html.PartialAsync("trailWeather", Model)
+@await Html.PartialAsync("trailReportForm", Model.Content)

@@ -1,0 +1,49 @@
+@using System.Globalization
+@using OutdoorGuide.Models
+@using OutdoorGuide.Models.ViewModels
+@inherits UmbracoViewPage<TrailPageViewModel>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+	string Describe(int code) => Text(WeatherCodes.DictionaryKey(code), WeatherCodes.Name(code));
+
+	// Open-Meteo ger vinden i km/h, men i Sverige anges vind i m/s
+	string Wind(double kmh) => (kmh / 3.6).ToString("0", CultureInfo.CurrentCulture) + " m/s";
+
+	var current = Model.Forecast?.Current;
+	var daily = Model.Forecast?.Daily;
+
+	// Open-Meteo skickar en lista per fält. Läs bara så många dagar som alla listor har, och högst fyra
+	var days = daily == null ? 0 : new[] { daily.Time.Count, daily.WeatherCode.Count, daily.TemperatureMin.Count, daily.TemperatureMax.Count, 4 }.Min();
+}
+
+@if (Model.HasCoordinates)
+{
+	<section class="trail-weather my-4" aria-labelledby="trail-weather-heading">
+		<h2 id="trail-weather-heading">@Text("Weather.Title", "Weather")</h2>
+
+		@if (current == null)
+		{
+			<p>@Text("Weather.Unavailable", "The weather can't be shown right now.")</p>
+		}
+		else
+		{
+			<p>
+				<strong>@Text("Weather.Now", "Right now"):</strong>
+				@Describe(current.WeatherCode), @current.Temperature.ToString("0") °C, @Text("Weather.Wind", "wind") @Wind(current.WindSpeed)
+			</p>
+
+			@if (days > 0)
+			{
+				<h3 class="h5">@Text("Weather.Forecast", "Coming days")</h3>
+				<ul class="list-unstyled">
+					@for (var i = 0; i < days; i++)
+					{
+						var day = DateOnly.ParseExact(daily!.Time[i], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+						<li>@day.ToString("dddd d MMM", CultureInfo.CurrentCulture): @Describe(daily.WeatherCode[i]), @daily.TemperatureMin[i].ToString("0")–@daily.TemperatureMax[i].ToString("0") °C</li>
+					}
+				</ul>
+			}
+		}
+	</section>
+}
