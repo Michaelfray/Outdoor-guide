@@ -1,9 +1,31 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<PlacesPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-@* Bara rubriken än så länge. Innehållet kommer i OUT-33. *@
-<h1>@Model.Content.Name</h1>
+<h1 class="mb-3">@Model.Content.Name</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+{
+	<p class="lead">@Model.Content.Intro</p>
+}
+
+<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled mt-2">
+	@foreach (var region in Model.Regions)
+	{
+		<li class="col">
+			<article class="card h-100">
+				<div class="card-body">
+					@* stretched-link gör hela kortet klickbart, men det är fortfarande en vanlig länk för tangentbord och skärmläsare *@
+					<h2 class="h4 card-title"><a href="@region.Url()" class="stretched-link">@region.Name</a></h2>
+					@if (!string.IsNullOrWhiteSpace(region.Intro))
+					{
+						<p class="card-text">@region.Intro</p>
+					}
+				</div>
+			</article>
+		</li>
+	}
+</ul>

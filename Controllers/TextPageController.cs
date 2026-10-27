@@ -5,7 +5,7 @@ namespace OutdoorGuide.Controllers
 {
     public class TextPageController(PageControllerDependencies dependencies) : BasePageController<TextPage, TextPageViewModel>(dependencies)
     {
-        // Bara sidan än så länge. Det som vyn ska lista räknas ut här i OUT-33.
+         // Textsidan behöver inget mer än sidan själv: vyn visar ingress och brödtext (OUT-58)
         protected override TextPageViewModel Build(TextPage page) => new TextPageViewModel { Content = page };
     }
 }

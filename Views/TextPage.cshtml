@@ -1,9 +1,20 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TextPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-@* Bara rubriken än så länge. Innehållet kommer i OUT-33. *@
-<h1>@Model.Content.Name</h1>
+<article class="row justify-content-center">
+	<div class="col-lg-8">
+		<h1 class="mb-3">@Model.Content.Name</h1>
+
+		@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+		{
+			<p class="lead">@Model.Content.Intro</p>
+		}
+
+		@* Brödtexten är rich text från redaktören. Umbraco skriver ut den som HTML, utan att koda om den *@
+		@Model.Content.Description
+	</div>
+</article>

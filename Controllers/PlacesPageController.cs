@@ -5,7 +5,12 @@ namespace OutdoorGuide.Controllers
 {
     public class PlacesPageController(PageControllerDependencies dependencies) : BasePageController<PlacesPage, PlacesPageViewModel>(dependencies)
     {
-        // Bara sidan än så länge. Det som vyn ska lista räknas ut här i OUT-33.
-        protected override PlacesPageViewModel Build(PlacesPage page) => new PlacesPageViewModel { Content = page };
+        protected override PlacesPageViewModel Build(PlacesPage page) => new PlacesPageViewModel
+        {
+            Content = page,
+
+            // Regionerna ligger direkt under Start, inte under Platser (beslut 21/10)
+            Regions = page.AncestorOrSelf<Start>()?.Children<Region>()?.Where(region => region.IsPublished()).ToList() ?? [],
+        };
     }
 }
