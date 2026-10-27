@@ -1,6 +1,46 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Login>
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using OutdoorGuide.Models.ViewModels
+@using Umbraco.Cms.Web.Website.Controllers
+@inherits UmbracoViewPage<LoginPageViewModel>
+
 @{
-	Layout = null;
+	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// Umbracos UmbLoginController visar sidan igen med ett fel i ModelState när inloggningen misslyckas
+	var failed = !ViewData.ModelState.IsValid;
+
+	// Vart besökaren skickas efter inloggningen. Umbraco läser den som RedirectUrl
+	object? routeValues = Model.ReturnUrl is null ? null : new { RedirectUrl = Model.ReturnUrl };
 }
+
+<div class="row justify-content-center">
+	<div class="col-md-8 col-lg-5">
+		<h1 class="mb-4">@Model.Content.Name</h1>
+
+		@using (Html.BeginUmbracoForm<UmbLoginController>(nameof(UmbLoginController.HandleLogin), routeValues))
+		{
+			@if (failed)
+			{
+				<div class="alert alert-danger" role="alert">@Text("Member.LoginFailed", "Wrong username or password, or the account is locked.")</div>
+			}
+
+			<div class="mb-3">
+				<label for="member-username" class="form-label">@Text("Member.Username", "Username")</label>
+				<input id="member-username" name="loginModel.Username" type="text" class="form-control" required autocomplete="username" />
+			</div>
+
+			<div class="mb-4">
+				<label for="member-password" class="form-label">@Text("Member.Password", "Password")</label>
+				<input id="member-password" name="loginModel.Password" type="password" class="form-control" required autocomplete="current-password" />
+			</div>
+
+			<button type="submit" class="btn btn-primary w-100">@Text("Member.LoginButton", "Log in")</button>
+		}
+
+		@if (Model.RegisterPageUrl is string registerUrl)
+		{
+			<p class="mt-4"><a href="@registerUrl">@Text("Member.NoAccountLink", "No account? Create one")</a></p>
+		}
+	</div>
+</div>

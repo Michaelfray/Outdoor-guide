@@ -1,6 +1,25 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Account>
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using OutdoorGuide.Models.ViewModels
+@using Umbraco.Cms.Web.Website.Controllers
+@inject Umbraco.Cms.Core.Security.IMemberManager MemberManager
+@inherits UmbracoViewPage<AccountPageViewModel>
+
 @{
-	Layout = null;
+	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var member = await MemberManager.GetCurrentMemberAsync();
+}
+
+@* Bara det som behövs för att testa utloggningen. Resten av Mitt konto kommer i OUT-39. *@
+<h1>@Model.Content.Name</h1>
+
+@if (member != null)
+{
+	<p>@Text("Member.LoggedInAs", "Logged in as") <strong>@(member.Name ?? member.UserName)</strong></p>
+
+	@using (Html.BeginUmbracoForm<UmbLoginStatusController>(nameof(UmbLoginStatusController.HandleLogout), new { RedirectUrl = Model.StartPage?.Url() ?? "/" }))
+	{
+		<button type="submit" class="btn btn-outline-secondary">@Text("Member.LogoutButton", "Log out")</button>
+	}
 }
