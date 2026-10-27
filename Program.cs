@@ -1,4 +1,4 @@
-
+using Microsoft.AspNetCore.Rewrite;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 #if DEBUG
@@ -16,6 +16,7 @@ WebApplication app = builder.Build();
 
 await app.BootUmbracoAsync();
 
+app.UseRewriter(new RewriteOptions().AddRewrite(@"^(en/)?sitemap\.xml$", "$1sitemap/", skipRemainingRules: true));
 
 app.UseUmbraco()
     .WithMiddleware(u =>
