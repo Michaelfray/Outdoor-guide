@@ -1,9 +1,30 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailsPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-@* Bara rubriken än så länge. Innehållet kommer i OUT-33. *@
-<h1>@Model.Content.Name</h1>
+<h1 class="mb-3">@Model.Content.Name</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+{
+	<p class="lead">@Model.Content.Intro</p>
+}
+
+<ul class="row row-cols-1 row-cols-md-2 g-4 list-unstyled mt-2">
+	@foreach (var activity in Model.ActivityPages)
+	{
+		<li class="col">
+			<article class="card h-100">
+				<div class="card-body">
+					<h2 class="h4 card-title"><a href="@activity.Url()" class="stretched-link">@activity.Name</a></h2>
+					@if (!string.IsNullOrWhiteSpace(activity.Intro))
+					{
+						<p class="card-text">@activity.Intro</p>
+					}
+				</div>
+			</article>
+		</li>
+	}
+</ul>

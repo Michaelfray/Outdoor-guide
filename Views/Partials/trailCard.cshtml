@@ -1,0 +1,34 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<Trail>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// Bara de fakta som finns, så att det aldrig står "0 km" eller en ensam punkt
+	var facts = new List<string>();
+	if (Model.Length > 0)
+	{
+		facts.Add($"{Model.Length:0.#} km");
+	}
+	if (!string.IsNullOrEmpty(Model.Difficulty))
+	{
+		facts.Add(Text(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty));
+	}
+}
+
+@* Ett ledkort, för listor under en h2. Används på aktivitetssidorna och undersidorna (OUT-59, OUT-60) *@
+<article class="card h-100">
+	<div class="card-body">
+		<h3 class="h5 card-title"><a href="@Model.Url()" class="stretched-link">@Model.Name</a></h3>
+
+		@if (!string.IsNullOrWhiteSpace(Model.Intro))
+		{
+			<p class="card-text">@Model.Intro</p>
+		}
+
+		@if (facts.Count > 0)
+		{
+			<p class="card-text small text-body-secondary mb-0">@string.Join(" · ", facts)</p>
+		}
+	</div>
+</article>
