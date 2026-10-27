@@ -5,7 +5,10 @@ namespace OutdoorGuide.Controllers
 {
     public class TrailsPageController(PageControllerDependencies dependencies) : BasePageController<TrailsPage, TrailsPageViewModel>(dependencies)
     {
-        // Bara sidan än så länge. Det som vyn ska lista räknas ut här i OUT-33.
-        protected override TrailsPageViewModel Build(TrailsPage page) => new TrailsPageViewModel { Content = page };
+        protected override TrailsPageViewModel Build(TrailsPage page) => new TrailsPageViewModel
+        {
+            Content = page,
+            ActivityPages = page.Children<ActivityPage>()?.Where(activity => activity.IsPublished()).ToList() ?? [],
+        };
     }
 }

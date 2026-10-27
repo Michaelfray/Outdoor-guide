@@ -5,7 +5,20 @@ namespace OutdoorGuide.Controllers
 {
     public class ActivityPageController(PageControllerDependencies dependencies) : BasePageController<ActivityPage, ActivityPageViewModel>(dependencies)
     {
-        // Bara sidan än så länge. Det som vyn ska lista räknas ut här i OUT-33.
-        protected override ActivityPageViewModel Build(ActivityPage page) => new ActivityPageViewModel { Content = page };
+        protected override ActivityPageViewModel Build(ActivityPage page)
+        {
+            var categories = page.Children<TrailCategory>()?.Where(category => category.IsPublished()).ToList() ?? [];
+
+            // Lederna ligger under regioner och kommuner, så sök i hela trädet under Start.
+            // Saknar sidan aktivitet visas inga leder, hellre än alla
+            List<Trail> trails = string.IsNullOrEmpty(page.Activity)
+                ? []
+                : page.AncestorOrSelf<Start>()?.Descendants<Trail>()
+                    .Where(trail => trail.IsPublished() && trail.Activity == page.Activity)
+                    .OrderBy(trail => trail.Name)
+                    .ToList() ?? [];
+
+            return new ActivityPageViewModel { Content = page, Categories = categories, Trails = trails };
+        }
     }
 }

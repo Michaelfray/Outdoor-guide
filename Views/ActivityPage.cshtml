@@ -1,9 +1,57 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+﻿@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ActivityPageViewModel>
 
 @{
 	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 }
 
-@* Bara rubriken än så länge. Innehållet kommer i OUT-33. *@
-<h1>@Model.Content.Name</h1>
+<h1 class="mb-3">@Model.Content.Name</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+{
+	<p class="lead">@Model.Content.Intro</p>
+}
+
+@if (Model.Categories.Count > 0)
+{
+	<section class="mt-4" aria-labelledby="activity-categories-heading">
+		<h2 id="activity-categories-heading">@Text("Activity.Categories", "Types of trips")</h2>
+
+		<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
+			@foreach (var category in Model.Categories)
+			{
+				<li class="col">
+					<article class="card h-100">
+						<div class="card-body">
+							<h3 class="h5 card-title"><a href="@category.Url()" class="stretched-link">@category.Name</a></h3>
+							@if (!string.IsNullOrWhiteSpace(category.Intro))
+							{
+								<p class="card-text">@category.Intro</p>
+							}
+						</div>
+					</article>
+				</li>
+			}
+		</ul>
+	</section>
+}
+
+<section class="mt-5" aria-labelledby="activity-trails-heading">
+	<h2 id="activity-trails-heading">@Text("Activity.Trails", "All trails")</h2>
+
+	@if (Model.Trails.Count == 0)
+	{
+		<p>@Text("Activity.NoTrails", "There are no trails for this activity yet.")</p>
+	}
+	else
+	{
+		<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
+			@foreach (var trail in Model.Trails)
+			{
+				<li class="col">@await Html.PartialAsync("trailCard", trail)</li>
+			}
+		</ul>
+	}
+</section>
