@@ -37,7 +37,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddMemberDictionaryItems>("add-member-dictionary-items")
                 .To<AddMetaRobots>("add-meta-robots")
                 .To<AddSitemapPage>("add-sitemap-page")
-                .To<AddMemberRegisterDictionaryItems>("add-member-register-dictionary-items");
+                .To<AddMemberRegisterDictionaryItems>("add-member-register-dictionary-items")
+                .To<AddErrorPage>("add-error-page");
         }
     }
 }
