@@ -40,7 +40,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddMemberRegisterDictionaryItems>("add-member-register-dictionary-items")
                 .To<AddErrorPage>("add-error-page")
                 .To<AddWeatherDictionaryItems>("add-weather-dictionary-items")
-                .To<AddActivityPageDictionaryItems>("add-activity-page-dictionary-items");
+                .To<AddActivityPageDictionaryItems>("add-activity-page-dictionary-items")
+                .To<AddTrailCategoryDictionaryItems>("add-trail-category-dictionary-items");
         }
     }
 }
