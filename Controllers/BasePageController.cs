@@ -19,11 +19,16 @@ public abstract class BasePageController<TContent, TViewModel>(PageControllerDep
     public override IActionResult Index()
     {
         if (CurrentPage is not TContent page)
-            {
-                return NotFound();
-            }
+        {
+            return NotFound();
+        }
 
-        TViewModel model = Build(page);
+        return PageResult(page, Build(page));
+    }
+
+    /// <summary>Visar mallen med en färdig ViewModel. För actions som bygger sin ViewModel asynkront, som AccountController.</summary>
+    protected IActionResult PageResult(TContent page, TViewModel model)
+    {
         model.UrlSegment = GetUrlSegment(page);
 
         return CurrentTemplate(model);
