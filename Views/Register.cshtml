@@ -1,6 +1,83 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Register>
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using Umbraco.Cms.Core
+@using OutdoorGuide.Models.ViewModels
+@using Umbraco.Cms.Web.Website.Controllers
+@using Umbraco.Cms.Web.Website.Models
+@inherits UmbracoViewPage<RegisterPageViewModel>
+
 @{
-	Layout = null;
+	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// Ger fälten namnen registerModel.Name, registerModel.Email och så vidare, som UmbRegisterController läser
+	var registerModel = new RegisterModel();
+
+	// Vid fel visar Umbraco sidan igen med felen i ModelState. Fälten får egna texter på rätt språk, och Umbracos
+	// egna fel (till exempel en upptagen e-postadress) får en gemensam text
+	bool HasError(string key) => ViewData.ModelState[key]?.Errors.Count > 0;
+	var emailInvalid = HasError("registerModel.Email");
+	var passwordsDiffer = HasError("registerModel.ConfirmPassword");
+	var registerFailed = HasError("registerModel") || HasError("registerModel.Password") || HasError("registerModel.Name");
+
+	var passwordHint = string.Format(Text("Member.PasswordHint", "At least {0} characters."), Model.PasswordRequiredLength);
+
+	// Skickas krypterat med formuläret, så att ingen kan ändra dem
+	var settings = new
+	{
+		MemberTypeAlias = Constants.Conventions.MemberTypes.DefaultAlias,
+		UsernameIsEmail = true,
+		AutomaticLogIn = true,
+		RedirectUrl = Model.AccountPageUrl,
+	};
 }
+
+<div class="row justify-content-center">
+	<div class="col-md-8 col-lg-5">
+		<h1 class="mb-4">@Model.Content.Name</h1>
+
+		@using (Html.BeginUmbracoForm<UmbRegisterController>(nameof(UmbRegisterController.HandleRegisterMember), settings))
+		{
+			@if (registerFailed)
+			{
+				<div class="alert alert-danger" role="alert">@Text("Member.RegisterFailed", "The account could not be created. The email address may already be in use, or the password may be too short.")</div>
+			}
+
+			<div class="mb-3">
+				<label asp-for="@registerModel.Name" class="form-label">@Text("Member.Name", "Name")</label>
+				<input asp-for="@registerModel.Name" class="form-control" required autocomplete="name" />
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="@registerModel.Email" class="form-label">@Text("Member.Email", "Email")</label>
+				<input asp-for="@registerModel.Email" class="form-control" required autocomplete="email" />
+				@if (emailInvalid)
+				{
+					<div class="form-text text-danger">@Text("Member.EmailInvalid", "Enter a valid email address.")</div>
+				}
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="@registerModel.Password" class="form-label">@Text("Member.Password", "Password")</label>
+				<input asp-for="@registerModel.Password" class="form-control" required minlength="@Model.PasswordRequiredLength"
+					   autocomplete="new-password" aria-describedby="register-password-hint" />
+				<div id="register-password-hint" class="form-text">@passwordHint</div>
+			</div>
+
+			<div class="mb-4">
+				<label asp-for="@registerModel.ConfirmPassword" class="form-label">@Text("Member.ConfirmPassword", "Confirm password")</label>
+				<input asp-for="@registerModel.ConfirmPassword" class="form-control" required autocomplete="new-password" />
+				@if (passwordsDiffer)
+				{
+					<div class="form-text text-danger">@Text("Member.PasswordMismatch", "The passwords don't match.")</div>
+				}
+			</div>
+
+			<button type="submit" class="btn btn-primary w-100">@Text("Member.RegisterButton", "Create account")</button>
+		}
+
+		@if (Model.LoginPageUrl is string loginUrl)
+		{
+			<p class="mt-4"><a href="@loginUrl">@Text("Member.HaveAccountLink", "Already have an account? Log in")</a></p>
+		}
+	</div>
+</div>
