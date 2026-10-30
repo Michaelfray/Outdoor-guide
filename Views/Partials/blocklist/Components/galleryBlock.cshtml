@@ -1,0 +1,21 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@inherits UmbracoViewPage<BlockListItem<GalleryBlock>>
+
+@{
+    // Only images that still exist in the media library
+    var images = Model.Content.Images?.Where(image => image != null).ToList() ?? [];
+
+    if (images.Count == 0) { return; }
+}
+
+<figure class="block-gallery">
+    <div class="block-gallery__grid">
+        @foreach (var image in images)
+        {
+            @* Umbraco makes a smaller copy, so we don't send the full-size photo *@
+            <img src="@image.GetCropUrl(width: 600, height: 400)" alt="@image.Name" width="600" height="400"
+                 loading="lazy" />
+        }
+    </div>
+    <figcaption class="block-gallery__caption">@Umbraco.GetDictionaryValueOrDefault("Trail.Gallery", "Photos from the trail")</figcaption>
+</figure>

@@ -1,0 +1,14 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@inherits UmbracoViewPage<BlockListItem<GoodToKnowBlock>>
+
+@{
+    // Skip the block if the editor left the text empty
+    if (string.IsNullOrWhiteSpace(Model.Content.Text)) { return; }
+}
+
+<div class="block-good-to-know">
+    <p class="block-good-to-know__text">
+        <strong>@Umbraco.GetDictionaryValueOrDefault("Trail.GoodToKnow", "Good to know").</strong>
+        @Model.Content.Text
+    </p>
+</div>
