@@ -1,0 +1,75 @@
+/* Blocks on the trail page: warning, gallery and "Good to know" (OUT-50, 51, 52) */
+
+.umb-block-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+/* Warning: orange box with a triangle */
+.block-warning {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fbe6d2;
+  color: #7a3410;
+}
+
+.block-warning__icon {
+  flex: none;
+  margin-top: 3px;
+}
+
+.block-warning__text {
+  margin: 0;
+}
+
+/* Gallery: three photos in a row on desktop, two on mobile */
+.block-gallery {
+  margin: 0;
+}
+
+.block-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.block-gallery__grid img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.block-gallery__caption {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 575.98px) {
+  .block-gallery__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Good to know: light green box */
+.block-good-to-know {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--color-moss);
+}
+
+.block-good-to-know__text {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.block-good-to-know__text strong {
+  color: var(--color-forest);
+}
