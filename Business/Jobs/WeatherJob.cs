@@ -35,7 +35,7 @@ public class WeatherJob(
 			if (forecast is null)
 			{
 				failed++;
-				context.WriteLine($"Ingen prognos för {trail.Name}");
+				context.WriteLine($"Ingen prognos för {trail.Name} ({trail.Key})");
 				continue;
 			}
 
@@ -79,12 +79,13 @@ public class WeatherJob(
 
 		// Start och Trail varierar per språk, och utan webbförfrågan finns inget aktuellt språk.
 		// Då hittar DescendantsOrSelf inga leder, så varje språk anges. Koordinaterna är samma på alla språk.
-		// Koordinaterna läses medan contexten finns. Saknas de är båda 0, som i TrailController
+		// Koordinaterna läses medan contexten finns. Saknas de är båda 0, som i TrailController.
+		// Namnet varierar också per språk, så det läses med språket leden hittades på. Utan språk blir det null
 		return startPage.Cultures.Keys
-			.SelectMany(culture => startPage.DescendantsOrSelf<Trail>(culture))
-			.DistinctBy(trail => trail.Key)
-			.Where(trail => trail.Latitude != 0 || trail.Longitude != 0)
-			.Select(trail => new TrailCoordinates(trail.Key, trail.Name, (double)trail.Latitude, (double)trail.Longitude))
+			.SelectMany(culture => startPage.DescendantsOrSelf<Trail>(culture).Select(trail => (Trail: trail, Culture: culture)))
+			.DistinctBy(x => x.Trail.Key)
+			.Where(x => x.Trail.Latitude != 0 || x.Trail.Longitude != 0)
+			.Select(x => new TrailCoordinates(x.Trail.Key, x.Trail.Name(x.Culture), (double)x.Trail.Latitude, (double)x.Trail.Longitude))
 			.ToList();
 	}
 
