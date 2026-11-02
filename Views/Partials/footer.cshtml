@@ -18,6 +18,7 @@
                 </ul>
             </nav>
         </div>
+        @await Html.PartialAsync("NewsletterForm", Model)
         <p class="small mt-4 mb-0">
             @Umbraco.GetDictionaryValueOrDefault("Footer.WeatherSource", "Weather from")
             <a href="https://open-meteo.com/">Open-Meteo</a>
