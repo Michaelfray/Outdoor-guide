@@ -1,0 +1,51 @@
+@using OutdoorGuide.Controllers
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<IPageViewModel>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var status = Context.Request.Query[NewsletterStatus.QueryKey].ToString();
+	var sent = status == NewsletterStatus.Sent;
+
+	string? message = status switch
+	{
+		NewsletterStatus.Sent => Text("Newsletter.Sent", "Thank you! You are signed up for the newsletter."),
+		NewsletterStatus.Invalid => Text("Newsletter.Invalid", "The sign-up did not go through. Enter a valid email address."),
+		NewsletterStatus.Expired => Text("Newsletter.Expired", "The page was open for too long, so the sign-up did not go through. Please try again."),
+		_ => null,
+	};
+
+	var email = NewsletterTempData.Take(TempData);
+}
+
+<section id="@NewsletterStatus.Anchor" class="newsletter" aria-labelledby="newsletter-heading">
+	<h2 id="newsletter-heading">@Text("Newsletter.Title", "Newsletter")</h2>
+
+	@if (message != null)
+	{
+		<p id="newsletter-status" class="newsletter-status newsletter-status-@status" role="@(sent ? "status" : "alert")" tabindex="-1">@message</p>
+		<script>document.getElementById('newsletter-status').focus();</script>
+	}
+
+	@if (!sent)
+	{
+		<p>@Text("Newsletter.Intro", "Get tips on new trails and the best walks of the season.")</p>
+
+		using (Html.BeginUmbracoForm<NewsletterSurfaceController>(nameof(NewsletterSurfaceController.Submit)))
+		{
+			<p>
+				<label for="newsletter-email">@Text("Newsletter.Email", "Email address")</label>
+				<input id="newsletter-email" name="email" type="email" required
+					   maxlength="@NewsletterSubscription.EmailMaxLength" autocomplete="email" value="@email" />
+			</p>
+
+			<div style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+				<label for="newsletter-website">Website</label>
+				<input id="newsletter-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+			</div>
+
+			<button type="submit">@Text("Newsletter.Send", "Sign me up")</button>
+		}
+	}
+</section>
