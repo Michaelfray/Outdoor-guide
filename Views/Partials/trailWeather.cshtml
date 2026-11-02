@@ -15,6 +15,11 @@
 
 	// Open-Meteo skickar en lista per fält. Läs bara så många dagar som alla listor har, och högst fyra
 	var days = daily == null ? 0 : new[] { daily.Time.Count, daily.WeatherCode.Count, daily.TemperatureMin.Count, daily.TemperatureMax.Count, 4 }.Min();
+
+	// Sajtens tidszon, inte serverns, så att tiden blir densamma oavsett var sajten körs
+	var fetched = Model.FetchedUtc is DateTime utc
+		? TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm"))
+		: (DateTime?)null;
 }
 
 @if (Model.HasCoordinates)
@@ -28,6 +33,16 @@
 		}
 		else
 		{
+			@if (fetched != null)
+			{
+				<p class="text-muted small mb-1">@Text("Weather.Updated", "Updated") @fetched.Value.ToString("HH:mm", CultureInfo.InvariantCulture)</p>
+			}
+
+			@if (Model.IsStale)
+			{
+				<p class="text-warning-emphasis small">@Text("Weather.Stale", "The forecast may be out of date.")</p>
+			}
+
 			<p>
 				<strong>@Text("Weather.Now", "Right now"):</strong>
 				@Describe(current.WeatherCode), @current.Temperature.ToString("0") °C, @Text("Weather.Wind", "wind") @Wind(current.WindSpeed)

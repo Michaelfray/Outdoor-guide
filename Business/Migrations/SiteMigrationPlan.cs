@@ -43,7 +43,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddActivityPageDictionaryItems>("add-activity-page-dictionary-items")
                 .To<AddTrailCategoryDictionaryItems>("add-trail-category-dictionary-items")
                 .To<AddTrailBlocks>("add-trail-blocks")
-                .To<AddBlockDictionaryItems>("add-block-dictionary-items");
+                .To<AddBlockDictionaryItems>("add-block-dictionary-items")
+                .To<AddWeatherCacheDictionaryItems>("add-weather-cache-dictionary-items");
         }
     }
 }
