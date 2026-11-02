@@ -483,3 +483,7 @@ umbraco-package-schema.json
 
 # Media files
 /wwwroot/media/
+
+# Hangfire
+/umbraco/Data/Hangfire.db*
+
