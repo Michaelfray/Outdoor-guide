@@ -1,0 +1,21 @@
+{
+  "id": "outdoorguide.difficulty-picker",
+  "name": "Difficulty Picker",
+  "version": "1.0.0",
+  "allowTelemetry": false,
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "OutdoorGuide.PropertyEditorUi.DifficultyPicker",
+      "name": "Difficulty Picker",
+      "element": "/App_Plugins/DifficultyPicker/difficulty-picker.element.js",
+      "elementName": "outdoorguide-difficulty-picker",
+      "meta": {
+        "label": "Difficulty Picker",
+        "icon": "icon-flag",
+        "group": "pickers",
+        "propertyEditorSchemaAlias": "Umbraco.Plain.String"
+      }
+    }
+  ]
+}
