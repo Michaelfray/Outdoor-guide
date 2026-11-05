@@ -1,0 +1,287 @@
+/* The trail page, following "Ledsida – dator" and "Ledsida – mobil" in the design */
+
+/* Breadcrumbs: Hem / Stockholms län / Nacka / Källtorpssjön runt */
+.trail-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+/* The slash between the links. The empty text after "/" keeps screen readers from reading it */
+.trail-breadcrumbs li + li::before {
+  content: "/";
+  content: "/" / "";
+  margin-right: 4px;
+}
+
+.trail-breadcrumbs a {
+  color: var(--color-forest);
+}
+
+/* Heading area */
+.trail-header {
+  margin-bottom: 24px;
+}
+
+.trail-eyebrow {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-dark);
+}
+
+.trail-header h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.trail-location {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+}
+
+/* Mobile: one column. The two wrappers step aside, so all cards can be put in the design's order */
+.trail-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trail-main,
+.trail-aside {
+  display: contents;
+}
+
+.trail-hero { order: 1; }
+.trail-facts-card { order: 2; }
+.trail-weather { order: 3; }
+.trail-about { order: 4; }
+.trail-map { order: 5; }
+.trail-report { order: 6; }
+.trail-similar { order: 7; }
+
+/* The big photo */
+.trail-hero {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* White card, used by every part of the page */
+.trail-card,
+.trail-report {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.trail-card h2,
+.trail-report h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+/* About the trail */
+.trail-intro {
+  margin: 0 0 12px;
+  font-size: 1.1em;
+}
+
+.trail-description {
+  color: var(--color-text-muted);
+}
+
+.trail-description > :last-child {
+  margin-bottom: 0;
+}
+
+.trail-about .umb-block-list {
+  margin: 16px 0 0;
+}
+
+/* Facts: two columns with a small label and the value under it */
+.trail-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.trail-facts dt {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.trail-facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Weather: dark green card */
+.trail-weather {
+  border-color: var(--color-forest);
+  background: var(--color-forest);
+  color: #ffffff;
+}
+
+.trail-weather h3 {
+  margin: 16px 0 4px;
+  font-size: 17px;
+}
+
+.trail-weather p {
+  margin-bottom: 8px;
+}
+
+/* Bootstrap's grey and yellow text is too dark on green, so use the light colours instead */
+.trail-weather .text-muted {
+  color: var(--color-lichen) !important;
+}
+
+.trail-weather .text-warning-emphasis {
+  color: var(--color-sunset) !important;
+}
+
+.trail-weather ul {
+  margin: 0;
+}
+
+.trail-weather li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-forest-light);
+}
+
+.trail-weather li:last-child {
+  border-bottom: 0;
+}
+
+/* Not built yet: greyed out with a dashed border */
+.trail-coming-soon {
+  border-style: dashed;
+  border-color: var(--color-border-strong);
+  background: var(--color-divider);
+}
+
+.trail-coming-soon__text {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.trail-map .trail-coming-soon__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+}
+
+/* Report form: labels on their own line and big fields that are easy to tap */
+.trail-report label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.trail-report select,
+.trail-report textarea,
+.trail-report input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  background: var(--color-surface);
+  font: inherit;
+}
+
+.trail-report select,
+.trail-report input[type="text"] {
+  height: 48px;
+}
+
+.trail-report :focus-visible {
+  outline: 3px solid var(--color-forest);
+  outline-offset: 2px;
+}
+
+.trail-report button[type="submit"] {
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-accent-dark);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+}
+
+.trail-report button[type="submit"]:hover {
+  background: #8a3915;
+}
+
+/* The message after the form is sent */
+.trail-report-status {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--color-moss);
+  color: var(--color-forest);
+}
+
+.trail-report-status-invalid,
+.trail-report-status-expired {
+  background: #fbe6d2;
+  color: #7a3410;
+}
+
+/* Desktop: content to the left, facts and weather to the right */
+@media (min-width: 992px) {
+  .trail-header h1 {
+    font-size: 48px;
+    line-height: 1.05;
+  }
+
+  .trail-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .trail-main,
+  .trail-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .trail-card,
+  .trail-report {
+    padding: 22px 24px;
+  }
+
+  .trail-card h2,
+  .trail-report h2 {
+    font-size: 24px;
+  }
+
+  .trail-aside .trail-card h2 {
+    font-size: 22px;
+  }
+
+  .trail-map .trail-coming-soon__text {
+    min-height: 240px;
+  }
+}

@@ -2,41 +2,48 @@
 @inherits UmbracoViewPage<Trail>
 
 @{
-	var municipality = Model.AncestorOrSelf<Municipality>();
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 
-	string YesNo(bool value) => value
-		? Umbraco.GetDictionaryValueOrDefault("Common.Yes", "Yes")
-		: Umbraco.GetDictionaryValueOrDefault("Common.No", "No");
+	string YesNo(bool value) => value ? Text("Common.Yes", "Yes") : Text("Common.No", "No");
 }
 
-<dl class="trail-facts">
-	@if (Model.Length > 0)
-	{
-		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Length", "Length")</dt>
-		<dd>@Model.Length.ToString("0.#") km</dd>
-	}
+@* Each fact is a div with dt and dd, so the list can be a grid with two columns *@
+<section class="trail-card trail-facts-card" aria-labelledby="trail-facts-heading">
+	<h2 id="trail-facts-heading">@Text("Trail.Facts", "Facts")</h2>
 
-	@if (Model.Duration > 0)
-	{
-		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Time", "Time")</dt>
-		<dd>@Model.Duration.ToString("0.#") @Umbraco.GetDictionaryValueOrDefault("Trail.Hours", "hours")</dd>
-	}
+	<dl class="trail-facts">
+		@if (Model.Length > 0)
+		{
+			<div>
+				<dt>@Text("Trail.Length", "Length")</dt>
+				<dd>@Model.Length.ToString("0.#") km</dd>
+			</div>
+		}
 
-	@if (!string.IsNullOrEmpty(Model.Difficulty))
-	{
-		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Difficulty", "Difficulty")</dt>
-		<dd>@Umbraco.GetDictionaryValueOrDefault(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty)</dd>
-	}
+		@if (Model.Duration > 0)
+		{
+			<div>
+				<dt>@Text("Trail.Time", "Time")</dt>
+				<dd>@Model.Duration.ToString("0.#") @Text("Trail.Hours", "hours")</dd>
+			</div>
+		}
 
-	<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.ChildFriendly", "Child friendly")</dt>
-	<dd>@YesNo(Model.ChildFriendly)</dd>
+		@if (!string.IsNullOrEmpty(Model.Difficulty))
+		{
+			<div>
+				<dt>@Text("Trail.Difficulty", "Difficulty")</dt>
+				<dd>@Text(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty)</dd>
+			</div>
+		}
 
-	<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Loop", "Loop trail")</dt>
-	<dd>@YesNo(Model.Loop)</dd>
+		<div>
+			<dt>@Text("Trail.ChildFriendly", "Child friendly")</dt>
+			<dd>@YesNo(Model.ChildFriendly)</dd>
+		</div>
 
-	@if (municipality != null)
-	{
-		<dt>@Umbraco.GetDictionaryValueOrDefault("Trail.Municipality", "Municipality")</dt>
-		<dd><a href="@municipality.Url()">@municipality.Name</a></dd>
-	}
-</dl>
+		<div>
+			<dt>@Text("Trail.Loop", "Loop trail")</dt>
+			<dd>@YesNo(Model.Loop)</dd>
+		</div>
+	</dl>
+</section>
