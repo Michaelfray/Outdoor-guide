@@ -20,7 +20,7 @@
 }
 
 <section id="@NewsletterStatus.Anchor" class="newsletter" aria-labelledby="newsletter-heading">
-	<h2 id="newsletter-heading">@Text("Newsletter.Title", "Newsletter")</h2>
+	<h2 id="newsletter-heading" class="newsletter-title">@Text("Newsletter.Title", "Newsletter")</h2>
 
 	@if (message != null)
 	{
@@ -30,22 +30,24 @@
 
 	@if (!sent)
 	{
-		<p>@Text("Newsletter.Intro", "Get tips on new trails and the best walks of the season.")</p>
+		<p class="newsletter-intro">@Text("Newsletter.Intro", "Get tips on new trails and the best walks of the season.")</p>
 
 		using (Html.BeginUmbracoForm<NewsletterSurfaceController>(nameof(NewsletterSurfaceController.Submit)))
 		{
-			<p>
-				<label for="newsletter-email">@Text("Newsletter.Email", "Email address")</label>
-				<input id="newsletter-email" name="email" type="email" required
-					   maxlength="@NewsletterSubscription.EmailMaxLength" autocomplete="email" value="@email" />
-			</p>
+			<div class="newsletter-form">
+				<div class="newsletter-field">
+					<label for="newsletter-email">@Text("Newsletter.Email", "Email address")</label>
+					<input id="newsletter-email" name="email" type="email" required
+						   maxlength="@NewsletterSubscription.EmailMaxLength" autocomplete="email" value="@email" />
+				</div>
 
-			<div style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
-				<label for="newsletter-website">Website</label>
-				<input id="newsletter-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+				<div style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;" aria-hidden="true">
+					<label for="newsletter-website">Website</label>
+					<input id="newsletter-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+				</div>
+
+				<button type="submit" class="newsletter-button">@Text("Newsletter.Send", "Sign me up")</button>
 			</div>
-
-			<button type="submit">@Text("Newsletter.Send", "Sign me up")</button>
 		}
 	}
 </section>
