@@ -55,7 +55,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2")
                 .To<AddCookieDictionaryItems>("add-cookie-dictionary-items")
                 .To<AddStartDictionaryItems>("add-start-dictionary-items")
-                .To<AddFilterPillDictionaryItems>("add-filter-pill-dictionary-items");
+                .To<AddFilterPillDictionaryItems>("add-filter-pill-dictionary-items")
+                .To<AddDifficultyPicker>("add-difficulty-picker");
         }
     }
 }
