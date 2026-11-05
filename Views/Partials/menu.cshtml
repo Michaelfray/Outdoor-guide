@@ -1,6 +1,8 @@
 @using OutdoorGuide.Models
+@using Umbraco.Cms.Core.Security
 @* The menu gets the whole page model, so it can reach MenuItems and StartPage *@
 @inherits UmbracoViewPage<IPageViewModel>
+@inject IMemberManager MemberManager
 
 @{
     // The page the visitor is on right now
@@ -13,6 +15,15 @@
     // The start page is the ancestor of every page, so it only counts as current on itself.
     bool IsCurrent(IPublishedContent item) =>
         item.Id == current.Id || (item.Id != Model.StartPage?.Id && currentPath.Contains(item.Id.ToString()));
+
+    // Logga in or Mitt konto (OUT-54). The pages are children of the start page, so they follow the language
+    var isLoggedIn = MemberManager.IsLoggedIn();
+    IPublishedContent? memberPage = isLoggedIn
+        ? (IPublishedContent?)Model.StartPage?.FirstChild<Account>()
+        : Model.StartPage?.FirstChild<Login>();
+    var memberText = isLoggedIn
+        ? Umbraco.GetDictionaryValueOrDefault("Member.AccountLink", "My account")
+        : Umbraco.GetDictionaryValueOrDefault("Member.LoginLink", "Log in");
 }
 
 @* navbar-expand-lg: full menu on large screens, collapsed behind a button on small ones.
@@ -90,9 +101,20 @@
                 }
             </ul>
 
-            @* The language switcher, on the right of the menu bar *@
-            <div class="site-menu-lang">
-                @await Html.PartialAsync("languageSwitcher", Model.Content)
+            @* The language switcher and the member link, on the right of the menu bar.
+               On small screens they sit side by side at the bottom of the open menu, as in the design *@
+            <div class="site-menu-end">
+                <div class="site-menu-lang">
+                    @await Html.PartialAsync("languageSwitcher", Model.Content)
+                </div>
+
+                @if (memberPage != null)
+                {
+                    var isMemberCurrent = memberPage.Id == current.Id;
+
+                    <a class="site-menu-member" href="@memberPage.Url()"
+                       aria-current="@(isMemberCurrent ? "page" : null)">@memberText</a>
+                }
             </div>
         </div>
     </div>
