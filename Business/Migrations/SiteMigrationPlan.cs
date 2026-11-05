@@ -53,7 +53,9 @@ namespace OutdoorGuide.Business.Migrations
                 // (stegen hoppar över nycklar som finns, så det är ofarligt för alla andra).
                 .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items")
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2")
-                .To<AddCookieDictionaryItems>("add-cookie-dictionary-items");
+                .To<AddCookieDictionaryItems>("add-cookie-dictionary-items")
+                .To<AddStartDictionaryItems>("add-start-dictionary-items")
+                .To<AddFilterPillDictionaryItems>("add-filter-pill-dictionary-items");
         }
     }
 }
