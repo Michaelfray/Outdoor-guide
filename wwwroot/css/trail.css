@@ -65,6 +65,7 @@
 .trail-weather { order: 3; }
 .trail-about { order: 4; }
 .trail-map { order: 5; }
+.trail-rating { order: 6; }
 .trail-report { order: 6; }
 .trail-similar { order: 7; }
 
@@ -283,5 +284,191 @@
 
   .trail-map .trail-coming-soon__text {
     min-height: 240px;
+  }
+}
+
+/* ---------- Stjärnbetyg (OUT-80) ---------- */
+
+/* "★ 4,6 · 12 röster" under rubriken, en länk ner till betygskortet */
+.trail-header-rating {
+  display: inline-block;
+  margin-top: 6px;
+  text-decoration: none;
+}
+
+.trail-header-rating:hover .trail-rating-count,
+.trail-header-rating:focus-visible .trail-rating-count {
+  text-decoration: underline;
+}
+
+.trail-header-rating:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.trail-rating-summary {
+  margin: 0;
+}
+
+.trail-rating-average {
+  font-weight: 600;
+  color: var(--color-accent-dark); /* 6:1 mot vitt och mot bakgrunden */
+}
+
+.trail-rating-count {
+  color: var(--color-text-muted);
+}
+
+.trail-rating .trail-rating-summary {
+  margin-bottom: 12px;
+}
+
+/* Fem stjärnor på rad. Legend står till vänster, som "Ditt betyg" i designen */
+.trail-rating-stars {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.trail-rating-stars legend {
+  float: left;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Bootstraps reboot sätter clear: left på det som kommer efter en legend */
+.trail-rating-stars legend + * {
+  clear: none;
+}
+
+.trail-rating-options {
+  display: flex;
+}
+
+.trail-rating-star {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--color-border-strong);
+  cursor: pointer;
+  transition: color 0.1s ease, transform 0.1s ease;
+}
+
+/* Radioknappen ligger över stjärnan, osynlig, så att klick och tangentbord fungerar */
+.trail-rating-star input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.trail-rating-star:has(input:focus-visible) {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+/* Den valda stjärnan och alla före den lyser */
+.trail-rating-options:has(input[value="1"]:checked) .trail-rating-star:nth-child(-n+1),
+.trail-rating-options:has(input[value="2"]:checked) .trail-rating-star:nth-child(-n+2),
+.trail-rating-options:has(input[value="3"]:checked) .trail-rating-star:nth-child(-n+3),
+.trail-rating-options:has(input[value="4"]:checked) .trail-rating-star:nth-child(-n+4),
+.trail-rating-options:has(input[value="5"]:checked) .trail-rating-star:nth-child(-n+5) {
+  color: var(--color-accent-dark);
+}
+
+/* Med musen: stjärnan under pekaren och alla före den, så man ser vad man är på väg att välja */
+@media (hover: hover) {
+  /* :not(#_) höjer specificiteten, så att hovern går före de valda stjärnorna */
+  .trail-rating-options:hover .trail-rating-star:not(#_) {
+    color: var(--color-border-strong);
+  }
+
+  .trail-rating-options:has(.trail-rating-star:nth-child(1):hover) .trail-rating-star:nth-child(-n+1):not(#_),
+  .trail-rating-options:has(.trail-rating-star:nth-child(2):hover) .trail-rating-star:nth-child(-n+2):not(#_),
+  .trail-rating-options:has(.trail-rating-star:nth-child(3):hover) .trail-rating-star:nth-child(-n+3):not(#_),
+  .trail-rating-options:has(.trail-rating-star:nth-child(4):hover) .trail-rating-star:nth-child(-n+4):not(#_),
+  .trail-rating-options:has(.trail-rating-star:nth-child(5):hover) .trail-rating-star:nth-child(-n+5):not(#_) {
+    color: var(--color-sunset);
+  }
+
+  .trail-rating-star:hover {
+    transform: scale(1.1);
+  }
+}
+
+.trail-rating-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-forest);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.trail-rating-button:hover {
+  background: var(--color-forest-dark);
+}
+
+.trail-rating-button:focus-visible,
+.trail-rating-login a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+.trail-rating-login {
+  margin: 0;
+}
+
+.trail-rating-login a {
+  font-weight: 600;
+  color: var(--color-forest);
+}
+
+.trail-rating-status {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.trail-rating-status-saved {
+  background: var(--color-moss);
+  color: var(--color-forest-dark);
+}
+
+.trail-rating-status-invalid,
+.trail-rating-status-expired,
+.trail-rating-status-login,
+.trail-rating-status-retry {
+  background: #fbe6d2;
+  color: #7a3410;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-rating-star,
+  .trail-rating-button {
+    transition: none;
+  }
+
+  .trail-rating-star:hover {
+    transform: none;
   }
 }
