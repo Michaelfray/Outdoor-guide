@@ -18,6 +18,7 @@ namespace OutdoorGuide.Controllers
                 Filter = filter,
                 Trails = filter.Apply(trails).ToList(),
                 HasTrails = trails.Count > 0,
+                TotalTrails = trails.Count,
             };
         }
     }
