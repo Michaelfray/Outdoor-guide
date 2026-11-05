@@ -55,7 +55,9 @@ namespace OutdoorGuide.Business.Migrations
                 // Båda kollar vad som redan finns, så för alla andra gör de ingenting.
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2")
                 .To<UseDifficultyPicker>("use-difficulty-picker-2")
-                .To<AddCookieDictionaryItems>("add-cookie-dictionary-items");
+                .To<AddCookieDictionaryItems>("add-cookie-dictionary-items")
+                .To<AddStartDictionaryItems>("add-start-dictionary-items")
+                .To<AddFilterPillDictionaryItems>("add-filter-pill-dictionary-items");
         }
     }
 }
