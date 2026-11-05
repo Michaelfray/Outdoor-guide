@@ -1,0 +1,54 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<IPageViewModel>
+
+@{
+	// Har besökaren redan valt syns inte rutan alls, så den blinkar inte till vid varje sidladdning
+	if (CookieConsent.HasChosen(Context.Request))
+	{
+		return;
+	}
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+}
+
+@* Ingen modal: rutan ligger sist på sidan och följer med längst ner i fönstret tills besökaren har valt *@
+<div class="cookie-consent" id="cookie-consent" role="region"
+	 aria-label="@Text("Cookie.Label", "Cookies")">
+	<div class="container cookie-consent-inner">
+		<p class="cookie-consent-text">@Text("Cookie.Text", "We use necessary cookies. With your consent, we also use cookies for statistics.")</p>
+		<div class="cookie-consent-buttons">
+			<button type="button" class="cookie-consent-button cookie-consent-button-secondary"
+					data-consent="@CookieConsent.Necessary">@Text("Cookie.NecessaryButton", "Only necessary")</button>
+			<button type="button" class="cookie-consent-button cookie-consent-button-primary"
+					data-consent="@CookieConsent.All">@Text("Cookie.AcceptAllButton", "Accept all")</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	(function () {
+		var box = document.getElementById('cookie-consent');
+
+		box.addEventListener('click', function (event) {
+			var choice = event.target.closest('[data-consent]');
+
+			if (!choice) {
+				return;
+			}
+
+			// Ett år, för hela sajten. Secure bara på https, annars sparas den inte lokalt på http
+			var secure = location.protocol === 'https:' ? '; Secure' : '';
+			document.cookie = '@CookieConsent.CookieName=' + choice.dataset.consent
+				+ '; Max-Age=31536000; Path=/; SameSite=Lax' + secure;
+
+			box.remove();
+
+			// Fokus fanns på knappen som nu är borta, så flytta det till sidans innehåll i stället för till ingenting
+			var main = document.querySelector('main');
+			if (main) {
+				main.setAttribute('tabindex', '-1');
+				main.focus({ preventScroll: true });
+			}
+		});
+	})();
+</script>
