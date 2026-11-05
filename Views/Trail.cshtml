@@ -1,4 +1,4 @@
-@using OutdoorGuide.Models
+﻿@using OutdoorGuide.Models
 @using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailPageViewModel>
 
@@ -33,9 +33,10 @@
 
 <nav class="trail-breadcrumbs" aria-label="@Text("Trail.Breadcrumbs", "Breadcrumbs")">
 	<ol>
-		@foreach (var page in ancestors)
+		@foreach (var crumb in ancestors)
 		{
-			<li><a href="@page.Url()">@page.Name</a></li>
+			<li><a href="@crumb.Url()">@crumb.Name</a></li>
+		}
 		}
 		<li aria-current="page">@trail.Name</li>
 	</ol>
