@@ -1,0 +1,60 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<TrailFilter>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var pageWithoutFilter = Context.Request.Path.ToString();
+}
+
+<section class="trail-filter" aria-labelledby="trail-filter-heading">
+	<h2 id="trail-filter-heading">@Text("Filter.Title", "Filter")</h2>
+
+	<form method="get" action="@pageWithoutFilter">
+		<p>
+			<label for="trail-filter-activity">@Text("Trail.Activity", "Activity")</label>
+			<select id="trail-filter-activity" name="@TrailFilter.ActivityKey">
+				<option value="">@Text("Filter.AllActivities", "All activities")</option>
+				@foreach (var value in ActivityValues.All)
+				{
+					<option value="@value" selected="@(Model.Activity == value)">@Text(ActivityValues.DictionaryKey(value), value)</option>
+				}
+			</select>
+		</p>
+
+		<p>
+			<label for="trail-filter-difficulty">@Text("Trail.Difficulty", "Difficulty")</label>
+			<select id="trail-filter-difficulty" name="@TrailFilter.DifficultyKey">
+				<option value="">@Text("Filter.AllDifficulties", "All difficulty levels")</option>
+				@foreach (var value in DifficultyValues.All)
+				{
+					<option value="@value" selected="@(Model.Difficulty == value)">@Text(DifficultyValues.DictionaryKey(value), value)</option>
+				}
+			</select>
+		</p>
+
+		<p>
+			<label for="trail-filter-length">@Text("Trail.Length", "Length")</label>
+			<select id="trail-filter-length" name="@TrailFilter.LengthKey">
+				<option value="">@Text("Filter.AllLengths", "All lengths")</option>
+				@foreach (var value in LengthValues.All)
+				{
+					<option value="@value" selected="@(Model.Length == value)">@Text(LengthValues.DictionaryKey(value), value)</option>
+				}
+			</select>
+		</p>
+
+		<p>
+			<input id="trail-filter-child-friendly" name="@TrailFilter.ChildFriendlyKey" type="checkbox" value="true" checked="@Model.ChildFriendly" />
+			<label for="trail-filter-child-friendly">@Text("Filter.OnlyChildFriendly", "Child friendly only")</label>
+		</p>
+
+		<p class="trail-filter-actions">
+			<button type="submit">@Text("Filter.Submit", "Show trails")</button>
+			@if (Model.IsActive)
+			{
+				<a href="@pageWithoutFilter" class="trail-filter-clear">@Text("Filter.Clear", "Clear filter")</a>
+			}
+		</p>
+	</form>
+</section>

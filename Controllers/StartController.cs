@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using OutdoorGuide.Models;
 using OutdoorGuide.Models.ViewModels;
 using Umbraco.Cms.Web.Common.PublishedModels;
 
@@ -6,8 +6,19 @@ namespace OutdoorGuide.Controllers
 {
     public class StartController(PageControllerDependencies dependencies) : BasePageController<Start, StartPageViewModel>(dependencies)
     {
-        // GET: StartController
-        protected override StartPageViewModel Build(Start page) => new StartPageViewModel{ Content = page };
+        protected override StartPageViewModel Build(Start page)
+        {
+            var filter = TrailFilter.FromQuery(Request.Query);
 
+            var trails = page.Descendants<Trail>()?.Where(trail => trail.IsPublished()).ToList() ?? [];
+
+            return new StartPageViewModel
+            {
+                Content = page,
+                Filter = filter,
+                Trails = filter.Apply(trails).ToList(),
+                HasTrails = trails.Count > 0,
+            };
+        }
     }
 }
