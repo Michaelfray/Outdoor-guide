@@ -1,12 +1,101 @@
-﻿@using OutdoorGuide.Models.ViewModels
+﻿@using OutdoorGuide.Models
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailPageViewModel>
 
 @{
 	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var trail = Model.Content;
+	var municipality = trail.AncestorOrSelf<Municipality>();
+	var region = trail.AncestorOrSelf<Region>();
+
+	// Breadcrumbs from the start page down to this trail
+	var ancestors = trail.Ancestors().Reverse().ToList();
+
+	// "VANDRING · LÄTT" above the heading, only with the values the trail has
+	var eyebrow = new List<string>();
+	if (!string.IsNullOrEmpty(trail.Activity))
+	{
+		eyebrow.Add(Text(ActivityValues.DictionaryKey(trail.Activity), trail.Activity));
+	}
+	if (!string.IsNullOrEmpty(trail.Difficulty))
+	{
+		eyebrow.Add(Text(DifficultyValues.DictionaryKey(trail.Difficulty), trail.Difficulty));
+	}
+
+	// "Nacka, Stockholms län" under the heading
+	var location = string.Join(", ", new[] { municipality?.Name, region?.Name }.Where(x => !string.IsNullOrEmpty(x)));
+
+	var description = trail.Description?.ToString();
 }
 
-<h1>@Model.Content.Name</h1>
-@await Html.PartialAsync("trailFacts", Model.Content)
-@await Html.GetBlockListHtmlAsync(Model.Content.Blocks)
-@await Html.PartialAsync("trailWeather", Model)
-@await Html.PartialAsync("trailReportForm", Model.Content)
+<nav class="trail-breadcrumbs" aria-label="@Text("Trail.Breadcrumbs", "Breadcrumbs")">
+	<ol>
+		@foreach (var crumb in ancestors)
+		{
+			<li><a href="@crumb.Url()">@crumb.Name</a></li>
+		}
+		<li aria-current="page">@trail.Name</li>
+	</ol>
+</nav>
+
+<header class="trail-header">
+	@if (eyebrow.Count > 0)
+	{
+		<p class="trail-eyebrow">@string.Join(" · ", eyebrow)</p>
+	}
+	<h1>@trail.Name</h1>
+	@if (!string.IsNullOrEmpty(location))
+	{
+		<p class="trail-location">@location</p>
+	}
+</header>
+
+@* Two columns on desktop. On mobile the facts and the weather move up under the photo, like in the design *@
+<div class="trail-layout">
+	<div class="trail-main">
+		@if (trail.Image != null)
+		{
+			@* The first thing people see, so load it right away *@
+			<img class="trail-hero" src="@trail.Image.GetCropUrl(width: 1200, height: 675)" alt="@trail.ImageAlt"
+				 width="1200" height="675" fetchpriority="high" />
+		}
+
+		<section class="trail-card trail-about" aria-labelledby="trail-about-heading">
+			<h2 id="trail-about-heading">@Text("Trail.About", "About the trail")</h2>
+
+			@if (!string.IsNullOrWhiteSpace(trail.Intro))
+			{
+				<p class="trail-intro">@trail.Intro</p>
+			}
+
+			@if (!string.IsNullOrWhiteSpace(description))
+			{
+				<div class="trail-description">@trail.Description</div>
+			}
+
+			@await Html.GetBlockListHtmlAsync(trail.Blocks)
+		</section>
+
+		@* Not built yet, so it is shown greyed out *@
+		<section class="trail-card trail-coming-soon trail-map" aria-labelledby="trail-map-heading">
+			<h2 id="trail-map-heading">@Text("Trail.Map", "Map")</h2>
+			<p class="trail-coming-soon__text">@Text("Trail.ComingSoon", "Coming soon")</p>
+		</section>
+
+		@await Html.PartialAsync("trailReportForm", trail)
+	</div>
+
+	<aside class="trail-aside">
+		@await Html.PartialAsync("trailFacts", trail)
+		@await Html.PartialAsync("trailWeather", Model)
+
+		@* Not built yet, so it is shown greyed out *@
+		<section class="trail-card trail-coming-soon trail-similar" aria-labelledby="trail-similar-heading">
+			<h2 id="trail-similar-heading">@Text("Trail.Similar", "Similar trails")</h2>
+			<p class="trail-coming-soon__text">@Text("Trail.ComingSoon", "Coming soon")</p>
+		</section>
+	</aside>
+</div>
