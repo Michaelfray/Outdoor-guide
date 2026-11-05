@@ -47,7 +47,12 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddWeatherCacheDictionaryItems>("add-weather-cache-dictionary-items")
                 .To<AddNewsletterDictionaryItems>("add-newsletter-dictionary-items")
                 .To<AddMoreFilterDictionaryItems>("add-more-filter-dictionary-items")
-                .To<AddRatingDictionaryItems>("add-rating-dictionary-items");
+                .To<AddRatingDictionaryItems>("add-rating-dictionary-items")
+                // Raden nedan försvann i mergen av PR #59 men har redan körts hos Mike, så den läggs tillbaka här.
+                // "-2"-steget kör rating-texterna en gång till för den som redan stod på add-trail-page-dictionary-items
+                // (stegen hoppar över nycklar som finns, så det är ofarligt för alla andra).
+                .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items")
+                .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2");
         }
     }
 }
