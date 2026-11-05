@@ -1,0 +1,74 @@
+@using OutdoorGuide.Controllers
+@using OutdoorGuide.Models
+@using OutdoorGuide.Models.ViewModels
+@using Microsoft.AspNetCore.WebUtilities
+@inherits UmbracoViewPage<TrailPageViewModel>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var trail = Model.Content;
+	var rating = Model.Rating;
+
+	var status = Context.Request.Query[TrailRatingStatus.QueryKey].ToString();
+
+	string? message = status switch
+	{
+		TrailRatingStatus.Saved => Text("Rating.Saved", "Thanks for your rating!"),
+		TrailRatingStatus.Invalid => Text("Rating.Invalid", "Choose between 1 and 5 stars."),
+		TrailRatingStatus.Expired => Text("Rating.Expired", "The page had been open too long. Please try again."),
+		TrailRatingStatus.LoginRequired => Text("Rating.LoginRequired", "You need to be logged in to rate."),
+		TrailRatingStatus.Retry => Text("Rating.Retry", "Something went wrong. Please try again."),
+		_ => null,
+	};
+
+	// Inloggningen skickar tillbaka besökaren hit, till betygen, efteråt
+	var loginPage = Model.StartPage?.FirstChild<Login>();
+	var loginUrl = loginPage == null
+		? null
+		: QueryHelpers.AddQueryString(loginPage.Url(), "returnUrl", $"{trail.Url()}#{TrailRatingStatus.Anchor}");
+}
+
+@* Stjärnbetyget på ledsidan (OUT-80), enligt kortet "Har du gått leden?" i designen *@
+<section id="@TrailRatingStatus.Anchor" class="trail-card trail-rating" aria-labelledby="trail-rating-heading">
+	<h2 id="trail-rating-heading">@Text("Rating.Title", "Rating")</h2>
+
+	@await Html.PartialAsync("trailRatingSummary", rating)
+
+	@if (message != null)
+	{
+		<p id="trail-rating-status" class="trail-rating-status trail-rating-status-@status"
+		   role="@(status == TrailRatingStatus.Saved ? "status" : "alert")" tabindex="-1">@message</p>
+		<script>document.getElementById('trail-rating-status').focus();</script>
+	}
+
+	@if (Model.IsMember)
+	{
+		using (Html.BeginUmbracoForm<TrailRatingSurfaceController>(nameof(TrailRatingSurfaceController.Rate)))
+		{
+			<fieldset class="trail-rating-stars">
+				<legend>@Text("Rating.YourScore", "Your rating")</legend>
+
+				@* En riktig radioknapp per stjärna, så att Tab och piltangenter fungerar. Etiketten "3 / 5" läses upp
+				   av skärmläsare, stjärnan bredvid är bara utseende *@
+				<div class="trail-rating-options">
+					@for (var score = TrailRating.MinScore; score <= TrailRating.MaxScore; score++)
+					{
+						<label class="trail-rating-star">
+							<input type="radio" name="score" value="@score" required
+								   checked="@(rating.MemberScore == score)" />
+							<span aria-hidden="true">★</span>
+							<span class="visually-hidden">@score / @TrailRating.MaxScore</span>
+						</label>
+					}
+				</div>
+			</fieldset>
+
+			<button type="submit" class="trail-rating-button">@Text("Rating.SaveButton", "Save rating")</button>
+		}
+	}
+	else if (loginUrl != null)
+	{
+		<p class="trail-rating-login"><a href="@loginUrl">@Text("Rating.LoginLink", "Log in to rate")</a></p>
+	}
+</section>
