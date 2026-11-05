@@ -45,7 +45,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddTrailBlocks>("add-trail-blocks")
                 .To<AddBlockDictionaryItems>("add-block-dictionary-items")
                 .To<AddWeatherCacheDictionaryItems>("add-weather-cache-dictionary-items")
-                .To<AddNewsletterDictionaryItems>("add-newsletter-dictionary-items");
+                .To<AddNewsletterDictionaryItems>("add-newsletter-dictionary-items")
+                .To<AddRatingDictionaryItems>("add-rating-dictionary-items");
         }
     }
 }

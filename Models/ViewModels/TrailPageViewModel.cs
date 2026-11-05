@@ -15,4 +15,10 @@ public class TrailPageViewModel : PageViewModel<Trail>
 
     /// <summary>Om leden har koordinater. Utan dem visas inget väder alls.</summary>
     public bool HasCoordinates { get; init; }
+
+    /// <summary>Snittet och antalet röster för leden, och medlemmens egen röst. Aldrig null, utan röster är snittet null och antalet 0.</summary>
+    public TrailRatingSummary Rating { get; init; } = new(null, 0, null);
+
+    /// <summary>Om besökaren är inloggad medlem. Bara medlemmar kan rösta.</summary>
+    public bool IsMember { get; init; }
 }

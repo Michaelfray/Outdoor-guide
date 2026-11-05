@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using OutdoorGuide.Business.Services.Interfaces;
+using OutdoorGuide.Models;
 using OutdoorGuide.Models.ViewModels;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace OutdoorGuide.Controllers
@@ -10,6 +12,8 @@ namespace OutdoorGuide.Controllers
         PageControllerDependencies dependencies,
         IWeatherService weatherService,
         IWeatherCacheService weatherCacheService,
+        ITrailRatingService trailRatingService,
+        IMemberManager memberManager,
         TimeProvider timeProvider)
         : BasePageController<Trail, TrailPageViewModel>(dependencies)
     {
@@ -32,7 +36,20 @@ namespace OutdoorGuide.Controllers
             // Saknas koordinater är båda 0, och då finns inget väder att hämta
             var hasCoordinates = page.Latitude != 0 || page.Longitude != 0;
 
-            var cached = hasCoordinates ? await weatherCacheService.GetAsync(page.Key) : null;
+            CachedWeatherForecast? cached = null;
+
+            if (hasCoordinates)
+            {
+                try
+                {
+                    cached = await weatherCacheService.GetAsync(page.Key);
+                }
+                catch (Exception ex)
+                {
+                    // Ett databasfel får inte krascha sidan. Prognosen hämtas i stället direkt från Open-Meteo nedan
+                    Dependencies.Logger.LogWarning(ex, "Kunde inte läsa vädercachen för leden {TrailKey}", page.Key);
+                }
+            }
 
             if (hasCoordinates && cached is null)
             {
@@ -57,6 +74,21 @@ namespace OutdoorGuide.Controllers
                 }
             }
 
+            TrailRatingSummary rating = new(null, 0, null);
+            var isMember = false;
+
+            try
+            {
+                var member = await memberManager.GetCurrentMemberAsync();
+                isMember = member is not null;
+                rating = await trailRatingService.GetSummaryAsync(page.Key, member?.Key);
+            }
+            catch (Exception ex)
+            {
+                // Ett databasfel får inte krascha sidan. Leden visas då utan betyg
+                Dependencies.Logger.LogWarning(ex, "Kunde inte läsa betygen för leden {TrailKey}", page.Key);
+            }
+
             return PageResult(page, new TrailPageViewModel
             {
                 Content = page,
@@ -64,6 +96,8 @@ namespace OutdoorGuide.Controllers
                 FetchedUtc = cached?.FetchedUtc,
                 IsStale = cached is not null && timeProvider.GetUtcNow().UtcDateTime - cached.FetchedUtc > StaleAfter,
                 HasCoordinates = hasCoordinates,
+                Rating = rating,
+                IsMember = isMember,
             });
         }
     }
