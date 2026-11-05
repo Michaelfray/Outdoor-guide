@@ -49,3 +49,11 @@ Newsletter;Newsletter.Send;Anmäl mig;Sign me up;Formulär i sidfoten, knapp
 Newsletter;Newsletter.Sent;Tack! Du är anmäld till nyhetsbrevet.;Thank you! You are signed up for the newsletter.;Formulär i sidfoten, efter anmälan
 Newsletter;Newsletter.Invalid;Anmälan gick inte igenom. Skriv en giltig e-postadress.;The sign-up did not go through. Enter a valid email address.;Formulär i sidfoten, fel
 Newsletter;Newsletter.Expired;Sidan var öppen för länge, så anmälan gick inte igenom. Försök igen.;The page was open for too long, so the sign-up did not go through. Please try again.;Formulär i sidfoten, fel
+Filter;Filter.AllActivities;Alla aktiviteter;All activities;Filter, första valet för aktivitet
+Filter;Filter.AllLengths;Alla längder;All lengths;Filter, första valet för längd
+Filter;Filter.Length.Short;Kort (under 5 km);Short (under 5 km);Filter, längdgrupp
+Filter;Filter.Length.Medium;Mellan (5–15 km);Medium (5–15 km);Filter, längdgrupp
+Filter;Filter.Length.Long;Lång (över 15 km);Long (over 15 km);Filter, längdgrupp
+Filter;Filter.Submit;Visa leder;Show trails;Filter, knapp
+Filter;Filter.Clear;Rensa filtret;Clear filter;Filter, länk som tar bort filtret
+Filter;Filter.NoResults;Inga leder matchar filtret.;No trails match the filter.;Filter, när inga leder hittas
