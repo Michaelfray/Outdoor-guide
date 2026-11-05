@@ -1,0 +1,80 @@
+/* Cookie-rutan (OUT-77): en vit rad som följer med längst ner i fönstret tills besökaren har valt */
+.cookie-consent {
+  position: sticky;
+  bottom: 0;
+  z-index: 1030; /* över innehållet, under Bootstraps modaler */
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 16px rgb(18 51 38 / 0.08);
+}
+
+.cookie-consent-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding-block: 0.875rem;
+}
+
+.cookie-consent-text {
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.cookie-consent-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cookie-consent-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cookie-consent-button-secondary {
+  border: 1px solid var(--color-forest);
+  background: var(--color-surface);
+  color: var(--color-forest);
+}
+
+.cookie-consent-button-secondary:hover {
+  background: var(--color-moss);
+}
+
+.cookie-consent-button-primary {
+  border: 1px solid var(--color-forest);
+  background: var(--color-forest);
+  color: #fff;
+}
+
+.cookie-consent-button-primary:hover {
+  background: var(--color-forest-dark);
+  border-color: var(--color-forest-dark);
+}
+
+.cookie-consent-button:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+/* På mobil: texten överst och knapparna sida vid sida över hela bredden, som i designen */
+@media (max-width: 575.98px) {
+  .cookie-consent-buttons {
+    width: 100%;
+  }
+
+  .cookie-consent-button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-consent-button {
+    transition: none;
+  }
+}

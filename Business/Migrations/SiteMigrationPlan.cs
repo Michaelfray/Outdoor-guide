@@ -54,7 +54,8 @@ namespace OutdoorGuide.Business.Migrations
                 // så rating-texterna och svårighetsväljaren har aldrig körts där. "-2"-stegen kör dem en gång till.
                 // Båda kollar vad som redan finns, så för alla andra gör de ingenting.
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2")
-                .To<UseDifficultyPicker>("use-difficulty-picker-2");
+                .To<UseDifficultyPicker>("use-difficulty-picker-2")
+                .To<AddCookieDictionaryItems>("add-cookie-dictionary-items");
         }
     }
 }
