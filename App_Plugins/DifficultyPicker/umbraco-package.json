@@ -1,0 +1,39 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "name": "OutdoorGuide.DifficultyPicker",
+  "version": "1.0.0",
+  "allowPublicAccess": false,
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "OutdoorGuide.PropertyEditorUi.DifficultyPicker",
+      "name": "Outdoor Guide Difficulty Picker",
+      "element": "/App_Plugins/DifficultyPicker/difficulty-picker.js",
+      "elementName": "og-difficulty-picker",
+      "meta": {
+        "label": "Difficulty picker",
+        "icon": "icon-mountain",
+        "group": "pickers",
+        "propertyEditorSchemaAlias": "Umbraco.RadioButtonList"
+      }
+    },
+    {
+      "type": "localization",
+      "alias": "OutdoorGuide.DifficultyPicker.Localization.En",
+      "name": "Difficulty picker (English)",
+      "meta": {
+        "culture": "en"
+      },
+      "js": "/App_Plugins/DifficultyPicker/lang/en.js"
+    },
+    {
+      "type": "localization",
+      "alias": "OutdoorGuide.DifficultyPicker.Localization.Sv",
+      "name": "Difficulty picker (Svenska)",
+      "meta": {
+        "culture": "sv"
+      },
+      "js": "/App_Plugins/DifficultyPicker/lang/sv.js"
+    }
+  ]
+}
