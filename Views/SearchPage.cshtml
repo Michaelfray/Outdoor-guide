@@ -1,7 +1,37 @@
-﻿@using OutdoorGuide.Models.ViewModels
+﻿@using OutdoorGuide.Models
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<SearchPageViewModel>
 @{
 	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	string TypeText(SearchHitType type) => type == SearchHitType.Trail
+		? Text("Search.Trail", "Trail")
+		: Text("Search.Municipality", "Municipality");
 }
 
 <h1>@Model.Content.Name</h1>
+
+<form method="get" role="search">
+	<p>
+		<label for="search-query">@Text("Search.Label", "Search")</label>
+		<input type="search" id="search-query" name="q" value="@Model.Query" maxlength="100"
+			   placeholder="@Text("Search.Placeholder", "Search trail or municipality")" />
+		<button type="submit">@Text("Search.Label", "Search")</button>
+	</p>
+</form>
+
+@if (Model.Results.Count > 0)
+{
+	<ul>
+		@foreach (var hit in Model.Results)
+		{
+			<li><a href="@hit.Url">@hit.Name</a> (@TypeText(hit.Type))</li>
+		}
+	</ul>
+}
+else if (Model.Query.Length > 0)
+{
+	<p>@Text("Search.NoResults", "No results")</p>
+}

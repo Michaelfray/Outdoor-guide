@@ -50,7 +50,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items")
                 .To<UseDifficultyPicker>("use-difficulty-picker")
                 .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items")
-                .To<AddSearchPage>("add-search-page");
+                .To<AddSearchPage>("add-search-page")
+                .To<AddSearchHitDictionaryItems>("add-search-hit-dictionary-items");
         }
     }
 }
