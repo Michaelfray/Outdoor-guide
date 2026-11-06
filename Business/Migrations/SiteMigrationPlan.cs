@@ -49,7 +49,9 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddMoreFilterDictionaryItems>("add-more-filter-dictionary-items")
                 .To<AddRatingDictionaryItems>("add-rating-dictionary-items")
                 .To<UseDifficultyPicker>("use-difficulty-picker")
-                .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items");
+                .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items")
+                .To<AddSearchPage>("add-search-page")
+                .To<AddSearchHitDictionaryItems>("add-search-hit-dictionary-items");
         }
     }
 }
