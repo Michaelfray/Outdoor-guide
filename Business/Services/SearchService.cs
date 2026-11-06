@@ -13,7 +13,8 @@ namespace OutdoorGuide.Business.Services;
 /// <summary>Söker bland leder och kommuner på namn. Byggd som lärarens FindService i schele/umbraco26.</summary>
 public class SearchService(
 	IExamineManager examineManager,
-	IUmbracoContextAccessor umbracoContextAccessor) : ISearchService
+	IUmbracoContextAccessor umbracoContextAccessor,
+	ILogger<SearchService> logger) : ISearchService
 {
 	// Med cirka 25 leder behövs inga sidnummer
 	private const int MaxHits = 50;
@@ -31,13 +32,24 @@ public class SearchService(
 		// Leder och kommuner varierar per språk, så namnet och publiceringen finns i ett fält per språk (nodeName_sv-se)
 		var culture = cultureInfo.Name.ToLowerInvariant();
 
-		var results = index.Searcher
-			.CreateQuery(IndexTypes.Content)
-			.ManagedQuery(query, [$"{UmbracoExamineFieldNames.NodeNameFieldName}_{culture}"])
-			.And().Field($"{UmbracoExamineFieldNames.PublishedFieldName}_{culture}", "y")
-			.And().Field(UmbracoExamineFieldNames.PublishedFieldName, "y")
-			.And().GroupedOr([ExamineFieldNames.ItemTypeFieldName], [Trail.ModelTypeAlias, Municipality.ModelTypeAlias])
-			.Execute(QueryOptions.SkipTake(0, MaxHits));
+		ISearchResults results;
+
+		try
+		{
+			results = index.Searcher
+				.CreateQuery(IndexTypes.Content)
+				.ManagedQuery(query, [$"{UmbracoExamineFieldNames.NodeNameFieldName}_{culture}"])
+				.And().Field($"{UmbracoExamineFieldNames.PublishedFieldName}_{culture}", "y")
+				.And().Field(UmbracoExamineFieldNames.PublishedFieldName, "y")
+				.And().GroupedOr([ExamineFieldNames.ItemTypeFieldName], [Trail.ModelTypeAlias, Municipality.ModelTypeAlias])
+				.Execute(QueryOptions.SkipTake(0, MaxHits));
+		}
+		catch (Exception ex)
+		{
+			// Sökordet tolkas som en Lucene-fråga, så tecken som " ( ~ kan kasta. Det får inte krascha sidan
+			logger.LogWarning(ex, "Kunde inte söka på {Query}", query);
+			return [];
+		}
 
 		var hits = new List<SearchHit>();
 

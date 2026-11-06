@@ -4,7 +4,7 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace OutdoorGuide.Business.Migrations
 {
-    /// <summary>Texterna som visar om en träff på söksidan är en led eller en kommun, på svenska och engelska.</summary>
+    /// <summary>Sökknappen och texterna som visar om en träff är en led eller en kommun, på svenska och engelska.</summary>
     public class AddSearchHitDictionaryItems(
         IMigrationContext context,
         ICoreScopeProvider scopeProvider,
@@ -18,6 +18,7 @@ namespace OutdoorGuide.Business.Migrations
         [
             ("Search.Trail", "Led", "Trail"),
             ("Search.Municipality", "Kommun", "Municipality"),
+            ("Search.SearchButton", "Sök", "Search"),
         ];
     }
 }
