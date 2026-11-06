@@ -4,31 +4,58 @@
 @{
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 
-	// Bara de fakta som finns, så att det aldrig står "0 km" eller en ensam punkt
-	var facts = new List<string>();
-	if (Model.Length > 0)
-	{
-		facts.Add($"{Model.Length:0.#} km");
-	}
-	if (!string.IsNullOrEmpty(Model.Difficulty))
-	{
-		facts.Add(Text(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty));
-	}
+	var municipality = Model.AncestorOrSelf<Municipality>();
+
+	// Etiketterna under namnet, bara de som leden har, så att det aldrig står "0 km"
+	var length = Model.Length > 0 ? $"{Model.Length:0.#} km" : null;
+	var difficulty = string.IsNullOrEmpty(Model.Difficulty)
+		? null
+		: Text(DifficultyValues.DictionaryKey(Model.Difficulty), Model.Difficulty);
+	var activity = string.IsNullOrEmpty(Model.Activity)
+		? null
+		: Text(ActivityValues.DictionaryKey(Model.Activity), Model.Activity);
 }
 
-@* Ett ledkort, för listor under en h2. Används på aktivitetssidorna och undersidorna (OUT-59, OUT-60) *@
-<article class="card h-100">
-	<div class="card-body">
-		<h3 class="h5 card-title"><a href="@Model.Url()" class="stretched-link">@Model.Name</a></h3>
-
-		@if (!string.IsNullOrWhiteSpace(Model.Intro))
+@* Ett ledkort enligt designen (Startsida – dator): bild med aktivitet, namn, kommun och etiketter.
+   Hela kortet är klickbart via stretched-link, men det är bara namnet som är länken. *@
+<article class="trail-tile">
+	<div class="trail-tile-media">
+		@if (Model.Image != null)
 		{
-			<p class="card-text">@Model.Intro</p>
+			@* Tom alt-text: bilden är dekoration, namnet står direkt under *@
+			<img src="@Model.Image.GetCropUrl(width: 640, height: 400)" alt="" loading="lazy" width="640" height="400" />
 		}
 
-		@if (facts.Count > 0)
+		@if (activity != null)
 		{
-			<p class="card-text small text-body-secondary mb-0">@string.Join(" · ", facts)</p>
+			<span class="trail-tile-activity">@activity</span>
+		}
+	</div>
+
+	<div class="trail-tile-body">
+		<h3 class="trail-tile-title"><a href="@Model.Url()" class="stretched-link">@Model.Name</a></h3>
+
+		@if (municipality != null)
+		{
+			<p class="trail-tile-place">@municipality.Name</p>
+		}
+
+		@if (length != null || difficulty != null || Model.ChildFriendly)
+		{
+			<ul class="trail-tile-tags">
+				@if (length != null)
+				{
+					<li class="trail-tag">@length</li>
+				}
+				@if (difficulty != null)
+				{
+					<li class="trail-tag trail-tag-difficulty">@difficulty</li>
+				}
+				@if (Model.ChildFriendly)
+				{
+					<li class="trail-tag trail-tag-kids">@Text("Trail.ChildFriendly", "Child friendly")</li>
+				}
+			</ul>
 		}
 	</div>
 </article>
