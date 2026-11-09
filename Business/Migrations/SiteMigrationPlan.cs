@@ -51,7 +51,14 @@ namespace OutdoorGuide.Business.Migrations
                 .To<UseDifficultyPicker>("use-difficulty-picker")
                 .To<AddTrailPageDictionaryItems>("add-trail-page-dictionary-items")
                 .To<AddSearchPage>("add-search-page")
-                .To<AddSearchHitDictionaryItems>("add-search-hit-dictionary-items");
+                .To<AddSearchHitDictionaryItems>("add-search-hit-dictionary-items")
+                // Den som körde add-trail-page-dictionary-items före PR #59 stod redan på det steget, så rating-texterna
+                // och svårighetsväljaren kördes aldrig där. "-2"-stegen kör dem igen, och sök-stegen körs en gång till
+                // för den som testade den här branchen innan sökningen kom in i main. Alla steg kollar vad som redan finns.
+                .To<AddRatingDictionaryItems>("add-rating-dictionary-items-2")
+                .To<UseDifficultyPicker>("use-difficulty-picker-2")
+                .To<AddSearchPage>("add-search-page-2")
+                .To<AddSearchHitDictionaryItems>("add-search-hit-dictionary-items-2");
         }
     }
 }
