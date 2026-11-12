@@ -10,4 +10,8 @@ public interface ITrailRatingService
 
 	/// <summary>Snittet och antalet röster för leden, och medlemmens egen röst. Skicka <c>null</c> om besökaren inte är inloggad.</summary>
 	Task<TrailRatingSummary> GetSummaryAsync(Guid trailKey, Guid? memberKey);
+
+	/// <summary>Snittet och antalet röster för flera leder i en enda fråga, till exempel för ledkorten på startsidan.
+	/// Leder utan röster finns inte med i svaret. <see cref="TrailRatingSummary.MemberScore"/> är alltid <c>null</c> här.</summary>
+	Task<IReadOnlyDictionary<Guid, TrailRatingSummary>> GetSummariesAsync(IReadOnlyCollection<Guid> trailKeys);
 }

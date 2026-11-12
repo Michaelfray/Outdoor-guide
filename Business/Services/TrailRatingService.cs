@@ -73,4 +73,34 @@ public class TrailRatingService(IEFCoreScopeProvider<TrailRatingDbContext> scope
 
 		return new TrailRatingSummary(average, ratings.Count, memberScore);
 	}
+
+	public async Task<IReadOnlyDictionary<Guid, TrailRatingSummary>> GetSummariesAsync(IReadOnlyCollection<Guid> trailKeys)
+	{
+		if (trailKeys.Count == 0)
+		{
+			return new Dictionary<Guid, TrailRatingSummary>();
+		}
+
+		using var scope = scopeProvider.CreateScope();
+
+		// En fråga för alla leder i stället för en per kort
+		var ratings = await scope.ExecuteWithContextAsync(async db =>
+			await db.Ratings
+				.AsNoTracking()
+				.Where(x => trailKeys.Contains(x.TrailKey))
+				.Select(x => new { x.TrailKey, x.Score })
+				.ToListAsync());
+
+		scope.Complete();
+
+		// Samma avrundning som i GetSummaryAsync, så att kortet och ledsidan visar samma snitt
+		return ratings
+			.GroupBy(x => x.TrailKey)
+			.ToDictionary(
+				g => g.Key,
+				g => new TrailRatingSummary(
+					Math.Round(g.Average(x => x.Score), 1, MidpointRounding.AwayFromZero),
+					g.Count(),
+					null));
+	}
 }
