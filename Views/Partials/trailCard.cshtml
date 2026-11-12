@@ -14,6 +14,10 @@
 	var activity = string.IsNullOrEmpty(Model.Activity)
 		? null
 		: Text(ActivityValues.DictionaryKey(Model.Activity), Model.Activity);
+
+	// Startsidan skickar med betyget (OUT-90). Andra sidor gör det inte, och då visas ingen stjärna
+	var rating = ViewData["Rating"] as TrailRatingSummary;
+	var average = rating?.Average?.ToString("0.0", System.Globalization.CultureInfo.CurrentCulture);
 }
 
 @* Ett ledkort enligt designen (Startsida – dator): bild med aktivitet, namn, kommun och etiketter.
@@ -40,7 +44,7 @@
 			<p class="trail-tile-place">@municipality.Name</p>
 		}
 
-		@if (length != null || difficulty != null || Model.ChildFriendly)
+		@if (length != null || difficulty != null || Model.ChildFriendly || average != null)
 		{
 			<ul class="trail-tile-tags">
 				@if (length != null)
@@ -54,6 +58,13 @@
 				@if (Model.ChildFriendly)
 				{
 					<li class="trail-tag trail-tag-kids">@Text("Trail.ChildFriendly", "Child friendly")</li>
+				}
+				@if (average != null)
+				{
+					<li class="trail-tile-rating">
+						<span class="visually-hidden">@Text("Rating.Title", "Rating"):</span>
+						<span aria-hidden="true">★</span> @average
+					</li>
 				}
 			</ul>
 		}
