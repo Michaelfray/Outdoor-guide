@@ -1,0 +1,400 @@
+/* Startsidan, filtret och ledkorten enligt "Startsida – dator" och "Startsida – mobil" i designen.
+   Filtret och korten används också på kommun-, aktivitets- och undersidorna. */
+
+/* ---------- Den gröna toppen ---------- */
+
+/* Ett grönt kort i stället för ett band över hela bredden, eftersom root.cshtml lägger sidan i en .container */
+.start-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+  padding: 28px 20px 32px;
+  border-radius: 12px;
+  background: var(--color-forest);
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .start-hero {
+    padding: 48px 48px 56px;
+  }
+}
+
+.start-eyebrow {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-sunset); /* 6.4:1 mot den gröna */
+}
+
+.start-hero h1 {
+  max-width: 18ch;
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.05;
+}
+
+.start-intro {
+  max-width: 560px;
+  margin: 0;
+  font-size: 19px;
+  color: var(--color-lichen);
+}
+
+/* ---------- Rubriken över lederna ---------- */
+
+.start-trails-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin-bottom: 20px;
+}
+
+.start-trails-header h2 {
+  margin: 0;
+  font-size: clamp(26px, 3.5vw, 36px);
+}
+
+.start-trails-count {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.start-trails-empty {
+  padding: 24px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* ---------- Filtret ---------- */
+
+.trail-filter {
+  margin-bottom: 24px;
+}
+
+.trail-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+@media (min-width: 768px) {
+  .trail-filter-form {
+    padding: 20px 24px;
+  }
+}
+
+/* En rad: "Aktivitet" till vänster och pillsen bredvid, på mobil ovanför.
+   Legend kan inte vara ett flex-barn i alla webbläsare, så den flyter till vänster i stället */
+.trail-filter-row {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.trail-filter-legend {
+  width: auto;
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (min-width: 576px) {
+  .trail-filter-legend {
+    float: left;
+    width: 96px;
+    margin: 0 16px 0 0;
+    line-height: 40px;
+  }
+
+  /* Bootstraps reboot sätter clear: left på det som kommer efter en legend */
+  .trail-filter-legend + .trail-filter-pills {
+    clear: none;
+  }
+}
+
+/* Flex-containern får eget formateringsområde och hamnar därför bredvid legend */
+.trail-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Radioknappen döljs men går fortfarande att nå med tangentbordet; span:en är det man ser */
+.trail-pill {
+  position: relative;
+}
+
+.trail-pill input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.trail-pill span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.trail-pill input:hover + span {
+  border-color: var(--color-forest);
+}
+
+.trail-pill input:checked + span {
+  border-color: var(--color-forest);
+  background: var(--color-forest);
+  color: #fff;
+}
+
+.trail-pill input:focus-visible + span {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+/* Sista raden: längd, barnvänliga och knapparna, med en linje ovanför */
+.trail-filter-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.trail-filter-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trail-filter-field label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.trail-filter-field select {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  background: var(--color-surface);
+  font: inherit;
+  color: var(--color-text);
+}
+
+.trail-filter-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.trail-filter-check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--color-forest);
+}
+
+.trail-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.trail-filter-clear {
+  font-weight: 600;
+  color: var(--color-forest);
+}
+
+.trail-filter-submit {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-forest);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.trail-filter-submit:hover {
+  background: var(--color-forest-dark);
+}
+
+.trail-filter-field select:focus-visible,
+.trail-filter-check input:focus-visible,
+.trail-filter-submit:focus-visible,
+.trail-filter-clear:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+/* På mobil: knappen över hela bredden längst ner */
+@media (max-width: 575.98px) {
+  .trail-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .trail-filter-submit {
+    flex: 1;
+  }
+}
+
+/* ---------- Ledkorten ---------- */
+
+.trail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail-tile {
+  position: relative; /* för stretched-link */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trail-tile:hover {
+  border-color: var(--color-forest);
+  box-shadow: 0 6px 18px rgb(18 51 38 / 0.1);
+}
+
+/* Fokusramen runt hela kortet när namnet har fokus */
+.trail-tile:has(.stretched-link:focus-visible) {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+.trail-tile .stretched-link:focus-visible {
+  outline: none;
+}
+
+/* Bildytan: en grön platta när leden saknar bild */
+.trail-tile-media {
+  position: relative;
+  aspect-ratio: 8 / 5;
+  background: var(--color-forest-light);
+}
+
+.trail-tile-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trail-tile-activity {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-forest-dark);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.trail-tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px 16px;
+}
+
+.trail-tile-title {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+/* Namnet är länken, men ska se ut som en rubrik, inte en blå länk */
+.trail-tile-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.trail-tile:hover .trail-tile-title a {
+  color: var(--color-forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.trail-tile-place {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.trail-tile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-moss);
+  color: var(--color-forest);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.trail-tag-difficulty {
+  background: var(--color-lichen);
+  color: var(--color-forest-dark);
+}
+
+.trail-tag-kids {
+  background: #fbe6d2;
+  color: #7a3410;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-pill span,
+  .trail-filter-submit,
+  .trail-tile {
+    transition: none;
+  }
+}

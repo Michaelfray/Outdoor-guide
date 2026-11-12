@@ -7,54 +7,70 @@
 	var pageWithoutFilter = Context.Request.Path.ToString();
 }
 
+@* Filtret enligt designen. Aktivitet och svårighet är radioknappar som ser ut som "pills", så att formuläret
+   fungerar som vanlig GET utan JavaScript. Valet syns i adressen och går att dela, som förut. *@
 <section class="trail-filter" aria-labelledby="trail-filter-heading">
-	<h2 id="trail-filter-heading">@Text("Filter.Title", "Filter")</h2>
+	<h2 id="trail-filter-heading" class="visually-hidden">@Text("Filter.Title", "Filter")</h2>
 
-	<form method="get" action="@pageWithoutFilter">
-		<p>
-			<label for="trail-filter-activity">@Text("Trail.Activity", "Activity")</label>
-			<select id="trail-filter-activity" name="@TrailFilter.ActivityKey">
-				<option value="">@Text("Filter.AllActivities", "All activities")</option>
+	<form method="get" action="@pageWithoutFilter" class="trail-filter-form">
+		<fieldset class="trail-filter-row">
+			<legend class="trail-filter-legend">@Text("Trail.Activity", "Activity")</legend>
+			<div class="trail-filter-pills">
+				<label class="trail-pill">
+					<input type="radio" name="@TrailFilter.ActivityKey" value="" checked="@(Model.Activity == null)" />
+					<span>@Text("Filter.All", "All")</span>
+				</label>
 				@foreach (var value in ActivityValues.All)
 				{
-					<option value="@value" selected="@(Model.Activity == value)">@Text(ActivityValues.DictionaryKey(value), value)</option>
+					<label class="trail-pill">
+						<input type="radio" name="@TrailFilter.ActivityKey" value="@value" checked="@(Model.Activity == value)" />
+						<span>@Text(ActivityValues.DictionaryKey(value), value)</span>
+					</label>
 				}
-			</select>
-		</p>
+			</div>
+		</fieldset>
 
-		<p>
-			<label for="trail-filter-difficulty">@Text("Trail.Difficulty", "Difficulty")</label>
-			<select id="trail-filter-difficulty" name="@TrailFilter.DifficultyKey">
-				<option value="">@Text("Filter.AllDifficulties", "All difficulty levels")</option>
+		<fieldset class="trail-filter-row">
+			<legend class="trail-filter-legend">@Text("Trail.Difficulty", "Difficulty")</legend>
+			<div class="trail-filter-pills">
+				<label class="trail-pill">
+					<input type="radio" name="@TrailFilter.DifficultyKey" value="" checked="@(Model.Difficulty == null)" />
+					<span>@Text("Filter.All", "All")</span>
+				</label>
 				@foreach (var value in DifficultyValues.All)
 				{
-					<option value="@value" selected="@(Model.Difficulty == value)">@Text(DifficultyValues.DictionaryKey(value), value)</option>
+					<label class="trail-pill">
+						<input type="radio" name="@TrailFilter.DifficultyKey" value="@value" checked="@(Model.Difficulty == value)" />
+						<span>@Text(DifficultyValues.DictionaryKey(value), value)</span>
+					</label>
 				}
-			</select>
-		</p>
+			</div>
+		</fieldset>
 
-		<p>
-			<label for="trail-filter-length">@Text("Trail.Length", "Length")</label>
-			<select id="trail-filter-length" name="@TrailFilter.LengthKey">
-				<option value="">@Text("Filter.AllLengths", "All lengths")</option>
-				@foreach (var value in LengthValues.All)
+		<div class="trail-filter-bottom">
+			<div class="trail-filter-field">
+				<label for="trail-filter-length">@Text("Trail.Length", "Length")</label>
+				<select id="trail-filter-length" name="@TrailFilter.LengthKey">
+					<option value="">@Text("Filter.AllLengths", "All lengths")</option>
+					@foreach (var value in LengthValues.All)
+					{
+						<option value="@value" selected="@(Model.Length == value)">@Text(LengthValues.DictionaryKey(value), value)</option>
+					}
+				</select>
+			</div>
+
+			<label class="trail-filter-check">
+				<input name="@TrailFilter.ChildFriendlyKey" type="checkbox" value="true" checked="@Model.ChildFriendly" />
+				@Text("Filter.OnlyChildFriendly", "Child friendly only")
+			</label>
+
+			<div class="trail-filter-actions">
+				@if (Model.IsActive)
 				{
-					<option value="@value" selected="@(Model.Length == value)">@Text(LengthValues.DictionaryKey(value), value)</option>
+					<a href="@pageWithoutFilter" class="trail-filter-clear">@Text("Filter.Clear", "Clear filter")</a>
 				}
-			</select>
-		</p>
-
-		<p>
-			<input id="trail-filter-child-friendly" name="@TrailFilter.ChildFriendlyKey" type="checkbox" value="true" checked="@Model.ChildFriendly" />
-			<label for="trail-filter-child-friendly">@Text("Filter.OnlyChildFriendly", "Child friendly only")</label>
-		</p>
-
-		<p class="trail-filter-actions">
-			<button type="submit">@Text("Filter.Submit", "Show trails")</button>
-			@if (Model.IsActive)
-			{
-				<a href="@pageWithoutFilter" class="trail-filter-clear">@Text("Filter.Clear", "Clear filter")</a>
-			}
-		</p>
+				<button type="submit" class="trail-filter-submit">@Text("Filter.Submit", "Show trails")</button>
+			</div>
+		</div>
 	</form>
 </section>
