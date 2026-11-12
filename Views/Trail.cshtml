@@ -51,6 +51,11 @@
 	{
 		<p class="trail-location">@location</p>
 	}
+
+	@* "★ 4,6 · 12 röster" under rubriken, som länkar ner till betygskortet (OUT-80) *@
+	<a class="trail-header-rating" href="#@TrailRatingStatus.Anchor">
+		@await Html.PartialAsync("trailRatingSummary", Model.Rating)
+	</a>
 </header>
 
 @* Two columns on desktop. On mobile the facts and the weather move up under the photo, like in the design *@
@@ -84,6 +89,8 @@
 			<h2 id="trail-map-heading">@Text("Trail.Map", "Map")</h2>
 			<p class="trail-coming-soon__text">@Text("Trail.ComingSoon", "Coming soon")</p>
 		</section>
+
+		@await Html.PartialAsync("trailRating", Model)
 
 		@await Html.PartialAsync("trailReportForm", trail)
 	</div>

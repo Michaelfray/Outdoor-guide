@@ -1,0 +1,23 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<TrailRatingSummary>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// "4,6" på svenska och "4.6" på engelska, med sajtens språk
+	var average = Model.Average?.ToString("0.0", System.Globalization.CultureInfo.CurrentCulture);
+}
+
+@* Snittet och antalet röster, "★ 4,6 · 12 röster". Används under rubriken och i betygskortet *@
+<p class="trail-rating-summary">
+	@if (average != null)
+	{
+		<span class="visually-hidden">@Text("Rating.Title", "Rating"):</span>
+		<span class="trail-rating-average"><span aria-hidden="true">★ </span>@average</span>
+		<span class="trail-rating-count">· @Model.Count @Text("Rating.Votes", "votes")</span>
+	}
+	else
+	{
+		<span class="trail-rating-count">@Model.Count @Text("Rating.Votes", "votes")</span>
+	}
+</p>
