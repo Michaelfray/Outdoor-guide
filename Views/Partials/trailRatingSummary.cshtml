@@ -6,6 +6,9 @@
 
 	// "4,6" på svenska och "4.6" på engelska, med sajtens språk
 	var average = Model.Average?.ToString("0.0", System.Globalization.CultureInfo.CurrentCulture);
+
+	// "1 röst" men "0 röster" och "2 röster" (OUT-92)
+	var votes = Model.Count == 1 ? Text("Rating.Vote", "vote") : Text("Rating.Votes", "votes");
 }
 
 @* Snittet och antalet röster, "★ 4,6 · 12 röster". Används under rubriken och i betygskortet *@
@@ -14,10 +17,10 @@
 	{
 		<span class="visually-hidden">@Text("Rating.Title", "Rating"):</span>
 		<span class="trail-rating-average"><span aria-hidden="true">★ </span>@average</span>
-		<span class="trail-rating-count">· @Model.Count @Text("Rating.Votes", "votes")</span>
+		<span class="trail-rating-count">· @Model.Count @votes</span>
 	}
 	else
 	{
-		<span class="trail-rating-count">@Model.Count @Text("Rating.Votes", "votes")</span>
+		<span class="trail-rating-count">@Model.Count @votes</span>
 	}
 </p>

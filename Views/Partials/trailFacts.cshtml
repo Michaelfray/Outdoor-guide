@@ -24,7 +24,8 @@
 		{
 			<div>
 				<dt>@Text("Trail.Time", "Time")</dt>
-				<dd>@Model.Duration.ToString("0.#") @Text("Trail.Hours", "hours")</dd>
+				@* "1 timme" men "1,5 timmar" och "2 timmar" (OUT-92) *@
+				<dd>@Model.Duration.ToString("0.#") @(Model.Duration == 1 ? Text("Trail.Hour", "hour") : Text("Trail.Hours", "hours"))</dd>
 			</div>
 		}
 
