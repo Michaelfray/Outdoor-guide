@@ -16,6 +16,24 @@
         "group": "pickers",
         "propertyEditorSchemaAlias": "Umbraco.Plain.String"
       }
+    },
+    {
+      "type": "localization",
+      "alias": "OutdoorGuide.DifficultyPicker.Localization.En",
+      "name": "Difficulty Picker (English)",
+      "meta": {
+        "culture": "en"
+      },
+      "js": "/App_Plugins/DifficultyPicker/lang/en.js"
+    },
+    {
+      "type": "localization",
+      "alias": "OutdoorGuide.DifficultyPicker.Localization.Sv",
+      "name": "Difficulty Picker (Svenska)",
+      "meta": {
+        "culture": "sv"
+      },
+      "js": "/App_Plugins/DifficultyPicker/lang/sv.js"
     }
   ]
 }
