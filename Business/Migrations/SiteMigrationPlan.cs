@@ -63,7 +63,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddStartDictionaryItems>("add-start-dictionary-items")
                 .To<AddFilterPillDictionaryItems>("add-filter-pill-dictionary-items")
                 .To<AddRatingVoteDictionaryItem>("add-rating-vote-dictionary-item")
-                .To<AddTrailHourDictionaryItem>("add-trail-hour-dictionary-item");
+                .To<AddTrailHourDictionaryItem>("add-trail-hour-dictionary-item")
+                .To<AddTextPageContent>("add-text-page-content");
         }
     }
 }
