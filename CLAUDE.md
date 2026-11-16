@@ -36,6 +36,7 @@ Hur långt planen har kommit sparas i tabellen `umbracoKeyValue`, nyckeln `Umbra
 1. **Nya steg läggs alltid sist** i `SiteMigrationPlan`: `.To<AddXxx>("add-xxx")`.
 2. **Ett steg som finns på `main` ändras aldrig**, och det döps aldrig om eller flyttas. Det har redan körts hos de andra och körs aldrig igen. Ändringar görs i ett nytt steg.
 3. **Varje del i ett steg kollar först om saken redan finns** och skapar den bara om den saknas (`Ensure...`-metoder som i `AddBaseAndStart`). Ingenting som någon har skapat eller ändrat i backoffice får skrivas över.
+    - **Undantag för innehållssteg** (texter, bilder och fältvärden på sidor, till exempel `AddSiteContent`): steget får fylla i ett fält som är tomt, och byta ett värde som fortfarande är exakt samma som i `Data/Testinnehall`. Ett värde som skiljer sig har någon ändrat i backoffice, och det lämnas som det är.
 4. Stegen ärver `UnscopedAsyncMigrationBase`, gör allt i ett `scopeProvider.CreateCoreScope()` och anropar `Context.Complete()` sist, som i `AddBaseAndStart`.
 5. När en mall skapas skickas innehållet i den befintliga vyfilen med (`EnsureTemplateAsync`), annars skrivs `.cshtml` över.
 6. Steget och de ändrade filerna i `umbraco/models` pushas i samma commit.
