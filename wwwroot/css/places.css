@@ -1,0 +1,77 @@
+/* Platser, regionsidan och kommunsidan (OUT-101), i samma stil som startsidan och ledsidan.
+   Korten använder trail-tile och trail-grid från start.css, brödsmulorna trail-breadcrumbs från trail.css. */
+
+.place-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+
+.place-header h1 {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 48px);
+  line-height: 1.05;
+}
+
+.place-intro {
+  margin: 0;
+  font-size: 19px;
+  color: var(--color-text-muted);
+}
+
+/* Brödtexten från redaktören, i ett vitt kort som "Om leden" på ledsidan */
+.place-description {
+  max-width: 720px;
+  margin-bottom: 32px;
+  padding: 24px 28px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.place-description > :last-child {
+  margin-bottom: 0;
+}
+
+.place-region + .place-region {
+  margin-top: 48px;
+}
+
+.place-section-heading {
+  margin: 0 0 16px;
+  font-size: clamp(26px, 3.5vw, 32px);
+}
+
+/* Regionens namn på Platser är en länk, men ska se ut som en rubrik */
+.place-section-heading a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.place-section-heading a:hover {
+  color: var(--color-forest);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.place-section-heading a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.place-region-intro {
+  max-width: 720px;
+  margin: -8px 0 16px;
+  color: var(--color-text-muted);
+}
+
+/* Ingressen på kommunkorten får högst tre rader, så att korten blir lika höga */
+.trail-tile-body .trail-tile-place {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

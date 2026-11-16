@@ -4,7 +4,8 @@
 @{
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 
-	var municipality = Model.AncestorOrSelf<Municipality>();
+	// Kommunsidan skickar HidePlace, eftersom kommunens namn redan står i rubriken där (OUT-101)
+	var municipality = ViewData["HidePlace"] is true ? null : Model.AncestorOrSelf<Municipality>();
 
 	// Etiketterna under namnet, bara de som leden har, så att det aldrig står "0 km"
 	var length = Model.Length > 0 ? $"{Model.Length:0.#} km" : null;

@@ -1,0 +1,36 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<MunicipalityCard>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var municipality = Model.Municipality;
+
+	// "1 led" eller "5 leder"
+	var count = Model.TrailCount == 1
+		? Text("Places.TrailCountOne", "1 trail")
+		: string.Format(Text("Places.TrailCount", "{0} trails"), Model.TrailCount);
+}
+
+@* Ett kommunkort på Platser och regionsidan (OUT-101). Samma klasser som ledkorten, så att de ser likadana ut *@
+<article class="trail-tile">
+	<div class="trail-tile-media">
+		@if (municipality.Image != null)
+		{
+			<img src="@municipality.Image.GetCropUrl(width: 640, height: 400)" alt="" loading="lazy" width="640" height="400" />
+		}
+	</div>
+
+	<div class="trail-tile-body">
+		<h3 class="trail-tile-title"><a href="@municipality.Url()" class="stretched-link">@municipality.Name</a></h3>
+
+		@if (!string.IsNullOrWhiteSpace(municipality.Intro))
+		{
+			<p class="trail-tile-place">@municipality.Intro</p>
+		}
+
+		<ul class="trail-tile-tags">
+			<li class="trail-tag">@count</li>
+		</ul>
+	</div>
+</article>

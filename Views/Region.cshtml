@@ -1,8 +1,45 @@
-﻿@using OutdoorGuide.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageViewModel>
+@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<RegionPageViewModel>
 
 @{
 	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	var region = Model.Content;
+	var description = region.Description?.ToString();
 }
 
-<h1>@Model.Content.Name</h1>
+@* Regionsidan: kommunerna som kort, så att man kommer vidare till lederna (OUT-101) *@
+@await Html.PartialAsync("breadcrumbs", region)
+
+<header class="place-header">
+	<h1>@region.Name</h1>
+	@if (!string.IsNullOrWhiteSpace(region.Intro))
+	{
+		<p class="place-intro">@region.Intro</p>
+	}
+</header>
+
+@if (!string.IsNullOrWhiteSpace(description))
+{
+	<div class="place-description">@region.Description</div>
+}
+
+<section aria-labelledby="region-municipalities-heading">
+	<h2 id="region-municipalities-heading" class="place-section-heading">@Text("Places.Municipalities", "Municipalities")</h2>
+
+	@if (Model.Municipalities.Count == 0)
+	{
+		<p class="start-trails-empty">@Text("Places.NoMunicipalities", "There are no municipalities here yet.")</p>
+	}
+	else
+	{
+		<ul class="trail-grid">
+			@foreach (var card in Model.Municipalities)
+			{
+				<li>@await Html.PartialAsync("municipalityCard", card)</li>
+			}
+		</ul>
+	}
+</section>
