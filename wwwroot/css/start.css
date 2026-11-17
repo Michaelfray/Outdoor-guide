@@ -357,12 +357,14 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+/* Kortet lyfts lite när man håller musen över det (OUT-102) */
 .trail-tile:hover {
   border-color: var(--color-forest);
-  box-shadow: 0 6px 18px rgb(18 51 38 / 0.1);
+  box-shadow: 0 10px 24px rgb(18 51 38 / 0.14);
+  transform: translateY(-3px);
 }
 
 /* Fokusramen runt hela kortet när namnet har fokus */
@@ -375,22 +377,66 @@
   outline: none;
 }
 
-/* Bildytan: en grön platta när leden saknar bild */
+/* Bildytan. Utan bild: en färg och ikon efter aktivitet, med ett mjukt ljus uppe till höger (OUT-102) */
 .trail-tile-media {
+  --tile-color: var(--color-forest-light);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 8 / 5;
-  background: var(--color-forest-light);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 85% 15%, rgb(255 255 255 / 0.18), transparent 55%),
+    linear-gradient(160deg, var(--tile-color), color-mix(in srgb, var(--tile-color) 70%, #000));
+}
+
+.trail-tile-media-hiking { --tile-color: #3d6b52; }
+.trail-tile-media-paddling { --tile-color: #3a5f7a; }
+.trail-tile-media-cycling { --tile-color: #7a6a3a; }
+.trail-tile-media-winter { --tile-color: #56677a; }
+
+.trail-tile-icon {
+  width: 34%;
+  max-width: 96px;
+  height: auto;
+  color: rgb(255 255 255 / 0.55);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.trail-tile:hover .trail-tile-icon {
+  color: rgb(255 255 255 / 0.8);
+  transform: scale(1.08);
 }
 
 .trail-tile-media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Bilden zoomar försiktigt in */
+.trail-tile:hover .trail-tile-media img {
+  transform: scale(1.05);
+}
+
+/* En mjuk mörk toning upptill, så att aktivitetsetiketten syns mot ljusa bilder */
+.trail-tile-media::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 45%;
+  background: linear-gradient(rgb(0 0 0 / 0.22), transparent);
+  pointer-events: none;
 }
 
 .trail-tile-activity {
   position: absolute;
+  z-index: 1;
   top: 10px;
   left: 10px;
   padding: 2px 8px;
@@ -469,7 +515,16 @@
   white-space: nowrap;
 }
 
+/* Ingen rörelse för den som har valt "minska rörelse" */
 @media (prefers-reduced-motion: reduce) {
+  .trail-tile:hover,
+  .trail-tile:hover .trail-tile-media img,
+  .trail-tile:hover .trail-tile-icon {
+    transform: none;
+  }
+
+  .trail-tile-media img,
+  .trail-tile-icon,
   .trail-pill span,
   .trail-filter-submit,
   .start-search button,

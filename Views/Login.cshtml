@@ -1,4 +1,4 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @using Umbraco.Cms.Web.Website.Controllers
 @inherits UmbracoViewPage<LoginPageViewModel>
 
@@ -14,15 +14,16 @@
 	object? routeValues = Model.ReturnUrl is null ? null : new { RedirectUrl = Model.ReturnUrl };
 }
 
-<div class="row justify-content-center">
-	<div class="col-md-8 col-lg-5">
+@* Formuläret i ett vitt kort, i sajtens stil i stället för Bootstraps blå (OUT-102) *@
+<div class="row justify-content-center member-page">
+	<div class="col-md-8 col-lg-5 member-card">
 		<h1 class="mb-4">@Model.Content.Name</h1>
 
 		@using (Html.BeginUmbracoForm<UmbLoginController>(nameof(UmbLoginController.HandleLogin), routeValues))
 		{
 			@if (failed)
 			{
-				<div class="alert alert-danger" role="alert">@Text("Member.LoginFailed", "Wrong username or password, or the account is locked.")</div>
+				<div class="member-alert" role="alert">@Text("Member.LoginFailed", "Wrong username or password, or the account is locked.")</div>
 			}
 
 			<div class="mb-3">
@@ -35,12 +36,12 @@
 				<input id="member-password" name="loginModel.Password" type="password" class="form-control" required autocomplete="current-password" />
 			</div>
 
-			<button type="submit" class="btn btn-primary w-100">@Text("Member.LoginButton", "Log in")</button>
+			<button type="submit" class="member-button w-100">@Text("Member.LoginButton", "Log in")</button>
 		}
 
 		@if (Model.RegisterPageUrl is string registerUrl)
 		{
-			<p class="mt-4"><a href="@registerUrl">@Text("Member.NoAccountLink", "No account? Create one")</a></p>
+			<p class="member-switch"><a href="@registerUrl">@Text("Member.NoAccountLink", "No account? Create one")</a></p>
 		}
 	</div>
 </div>

@@ -19,6 +19,10 @@
 		{
 			<img src="@municipality.Image.GetCropUrl(width: 640, height: 400)" alt="" loading="lazy" width="640" height="400" />
 		}
+		else
+		{
+			@await Html.PartialAsync("activityIcon", "place")
+		}
 	</div>
 
 	<div class="trail-tile-body">

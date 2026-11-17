@@ -1,4 +1,4 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @using Umbraco.Cms.Web.Website.Controllers
 @inherits UmbracoViewPage<AccountPageViewModel>
 
@@ -8,8 +8,9 @@
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 }
 
-<div class="row justify-content-center">
-	<div class="col-md-8 col-lg-6">
+@* Formuläret i ett vitt kort, i sajtens stil i stället för Bootstraps blå (OUT-102) *@
+<div class="row justify-content-center member-page">
+	<div class="col-md-8 col-lg-6 member-card">
 		<h1 class="mb-2">@Model.Content.Name</h1>
 		<p class="mb-4">@Text("Member.LoggedInAs", "Logged in as") <strong>@Model.MemberName</strong></p>
 
@@ -17,7 +18,7 @@
 
 		@using (Html.BeginUmbracoForm<UmbLoginStatusController>(nameof(UmbLoginStatusController.HandleLogout), new { RedirectUrl = Model.StartPage?.Url() ?? "/" }))
 		{
-			<button type="submit" class="btn btn-outline-secondary">@Text("Member.LogoutButton", "Log out")</button>
+			<button type="submit" class="member-button member-button-secondary">@Text("Member.LogoutButton", "Log out")</button>
 		}
 	</div>
 </div>

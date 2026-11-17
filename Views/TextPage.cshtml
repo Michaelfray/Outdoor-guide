@@ -1,20 +1,26 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TextPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-<article class="row justify-content-center">
-	<div class="col-lg-8">
-		<h1 class="mb-3">@Model.Content.Name</h1>
+@* Textsidorna (Säsongstips, Om oss, Kontakt med flera): rubrik och ingress som på kommunsidan,
+   och brödtexten i ett vitt kort med läsbar typografi (OUT-102) *@
+<article class="text-page">
+	@await Html.PartialAsync("breadcrumbs", Model.Content)
 
+	<header class="place-header">
+		<h1>@Model.Content.Name</h1>
 		@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
 		{
-			<p class="lead">@Model.Content.Intro</p>
+			<p class="place-intro">@Model.Content.Intro</p>
 		}
+	</header>
 
+	@if (!string.IsNullOrWhiteSpace(Model.Content.Description?.ToString()))
+	{
 		@* Brödtexten är rich text från redaktören. Umbraco skriver ut den som HTML, utan att koda om den *@
-		@Model.Content.Description
-	</div>
+		<div class="text-page-body">@Model.Content.Description</div>
+	}
 </article>
