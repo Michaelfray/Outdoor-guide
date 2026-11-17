@@ -34,3 +34,97 @@ h2,
 h3 {
   font-family: var(--font-heading);
 }
+
+/* ---------- Bootstraps färger i sajtens tema (OUT-96) ----------
+   Bootstrap har blå länkar, knappar och fokusskuggor som standard. Här sätts dess variabler en gång,
+   så att alla sidor får sajtens gröna färger, även sidor som inte har egen CSS (Sitemap, Sök, felsidan med flera).
+   site.css länkas efter bootstrap.min.css i root.cshtml, så de här reglerna vinner. */
+
+:root {
+  /* Länkar: mörkgrön, 9:1 mot bakgrunden, och ännu mörkare vid hover */
+  --bs-link-color: var(--color-forest);
+  --bs-link-color-rgb: 31, 77, 58;
+  --bs-link-hover-color: var(--color-forest-dark);
+  --bs-link-hover-color-rgb: 18, 51, 38;
+
+  /* "primary" används av text-primary, border-primary, bg-primary och liknande */
+  --bs-primary: var(--color-forest);
+  --bs-primary-rgb: 31, 77, 58;
+
+  /* Fokus: sajtens orange ram i stället för Bootstraps blå skugga */
+  --bs-focus-ring-color: rgb(240 163 94 / 0.6);
+
+  --bs-body-color: var(--color-text);
+  --bs-border-color: var(--color-border);
+  --bs-secondary-color: var(--color-text-muted);
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+/* Knapparna: grön, vit med grön kant och samma fokusram överallt */
+.btn {
+  --bs-btn-font-weight: 600;
+  --bs-btn-border-radius: 8px;
+  --bs-btn-focus-box-shadow: 0 0 0 3px var(--bs-focus-ring-color);
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color-forest);
+  --bs-btn-border-color: var(--color-forest);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-forest-dark);
+  --bs-btn-hover-border-color: var(--color-forest-dark);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-forest-dark);
+  --bs-btn-active-border-color: var(--color-forest-dark);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--color-forest-light);
+  --bs-btn-disabled-border-color: var(--color-forest-light);
+}
+
+.btn-outline-primary,
+.btn-outline-secondary {
+  --bs-btn-color: var(--color-forest);
+  --bs-btn-border-color: var(--color-forest);
+  --bs-btn-hover-color: var(--color-forest-dark);
+  --bs-btn-hover-bg: var(--color-moss);
+  --bs-btn-hover-border-color: var(--color-forest-dark);
+  --bs-btn-active-color: var(--color-forest-dark);
+  --bs-btn-active-bg: var(--color-lichen);
+  --bs-btn-active-border-color: var(--color-forest-dark);
+}
+
+/* Formulärfält: grön kant och orange fokusram i stället för blå skugga */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 3px var(--bs-focus-ring-color);
+}
+
+.form-check-input:checked {
+  background-color: var(--color-forest);
+  border-color: var(--color-forest);
+}
+
+.form-check-input:focus {
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 3px var(--bs-focus-ring-color);
+}
+
+/* Sidnumrering, om en sida använder Bootstraps pagination */
+.pagination {
+  --bs-pagination-color: var(--color-forest);
+  --bs-pagination-hover-color: var(--color-forest-dark);
+  --bs-pagination-active-bg: var(--color-forest);
+  --bs-pagination-active-border-color: var(--color-forest);
+  --bs-pagination-focus-box-shadow: 0 0 0 3px var(--bs-focus-ring-color);
+}
