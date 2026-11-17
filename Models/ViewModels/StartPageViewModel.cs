@@ -18,4 +18,11 @@ public class StartPageViewModel : PageViewModel<Start>
 
     /// <summary>Adressen till söksidan i det aktuella språket, eller <c>null</c> om sidan inte finns. Då visas ingen sökruta.</summary>
     public string? SearchUrl { get; init; }
+
+    /// <summary>Prognosen för Stockholm till väderkortet i toppen, eller <c>null</c> om den inte gick att hämta (OUT-103).
+    /// Sätts efter Build, eftersom vädret hämtas asynkront.</summary>
+    public WeatherForecast? StockholmWeather { get; set; }
+
+    /// <summary>Sidan Säsongstips till kortet under lederna, eller <c>null</c> om den inte finns (OUT-103).</summary>
+    public TextPage? SeasonalTips { get; init; }
 }

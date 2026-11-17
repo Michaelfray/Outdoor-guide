@@ -1,0 +1,37 @@
+@inherits UmbracoViewPage<TextPage>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// Årstiden just nu, så att kortet säger "Höst" i november i stället för att upprepa rubriken
+	var season = DateTime.Now.Month switch
+	{
+		3 or 4 or 5 => Text("Start.Season.Spring", "Spring"),
+		6 or 7 or 8 => Text("Start.Season.Summer", "Summer"),
+		9 or 10 or 11 => Text("Start.Season.Autumn", "Autumn"),
+		_ => Text("Start.Season.Winter", "Winter"),
+	};
+}
+
+@* Säsongstips-kortet under lederna på startsidan, enligt designen (OUT-103). Länkar till sidan Säsongstips *@
+<article class="seasonal-card">
+	<div class="seasonal-card-media" aria-hidden="true">
+		@* Ett löv, så att kortet har en bild även utan foto *@
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+			<path d="M5 19C5 10 10 5 20 4c-1 10-6 15-15 15z"></path>
+			<path d="M5 19 13 11"></path>
+		</svg>
+	</div>
+
+	<div class="seasonal-card-body">
+		<p class="seasonal-card-eyebrow">@season</p>
+		<h2 class="seasonal-card-title"><a href="@Model.Url()" class="stretched-link">@Model.Name</a></h2>
+
+		@if (!string.IsNullOrWhiteSpace(Model.Intro))
+		{
+			<p class="seasonal-card-intro">@Model.Intro</p>
+		}
+
+		<span class="seasonal-card-more" aria-hidden="true">@Text("Common.ReadMore", "Read more") →</span>
+	</div>
+</article>

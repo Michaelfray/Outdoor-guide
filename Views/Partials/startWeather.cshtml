@@ -1,0 +1,46 @@
+@using System.Globalization
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<WeatherForecast>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+	string Describe(int code) => Text(WeatherCodes.DictionaryKey(code), WeatherCodes.Name(code));
+
+	var daily = Model.Daily;
+
+	// Open-Meteo skickar en lista per fält. Läs bara så många dagar som alla listor har, och högst tre
+	var days = daily == null ? 0 : new[] { daily.Time.Count, daily.WeatherCode.Count, daily.TemperatureMax.Count, 3 }.Min();
+
+	// Idag, Imorgon och sedan veckodagen, som "Startsida – mobil" i designen
+	string DayName(int index, DateOnly day) => index switch
+	{
+		0 => Text("Start.Today", "Today"),
+		1 => Text("Start.Tomorrow", "Tomorrow"),
+		_ => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day.ToString("dddd", CultureInfo.CurrentCulture)),
+	};
+}
+
+@* Väder i Stockholm, i den gröna toppen på startsidan (OUT-103). Vädret kommer från Open-Meteo, som i sidfoten *@
+@if (days > 0)
+{
+	<aside class="start-weather" aria-labelledby="start-weather-heading">
+		<div class="start-weather-header">
+			<h2 id="start-weather-heading">@Text("Start.WeatherTitle", "Weather in Stockholm")</h2>
+			<span class="start-weather-source">Open-Meteo</span>
+		</div>
+
+		<ul class="start-weather-days">
+			@for (var i = 0; i < days; i++)
+			{
+				var day = DateOnly.ParseExact(daily!.Time[i], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				var description = Describe(daily.WeatherCode[i]);
+
+				<li>
+					<span class="start-weather-day">@DayName(i, day)</span>
+					<span class="start-weather-temp">@daily.TemperatureMax[i].ToString("0", CultureInfo.CurrentCulture)°</span>
+					<span class="start-weather-desc">@description</span>
+				</li>
+			}
+		</ul>
+	</aside>
+}
