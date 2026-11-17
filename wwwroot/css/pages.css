@@ -1,0 +1,222 @@
+/* Textsidorna och sidorna för inloggning och konto (OUT-102), i samma stil som ledsidan och kommunsidan */
+
+/* ---------- Textsidorna ---------- */
+
+/* Brödtexten i ett vitt kort, högst cirka 70 tecken per rad så att den är lätt att läsa */
+.text-page-body {
+  max-width: 760px;
+  padding: 28px 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+@media (max-width: 575.98px) {
+  .text-page-body {
+    padding: 20px;
+    font-size: 17px;
+  }
+}
+
+.text-page-body > :first-child {
+  margin-top: 0;
+}
+
+.text-page-body > :last-child {
+  margin-bottom: 0;
+}
+
+.text-page-body h2,
+.text-page-body h3 {
+  margin: 1.6em 0 0.5em;
+  line-height: 1.2;
+}
+
+.text-page-body h2 {
+  font-size: 26px;
+}
+
+.text-page-body h3 {
+  font-size: 21px;
+}
+
+.text-page-body p,
+.text-page-body ul,
+.text-page-body ol {
+  margin: 0 0 1em;
+}
+
+.text-page-body li + li {
+  margin-top: 0.35em;
+}
+
+/* Listpunkterna i sajtens orange */
+.text-page-body ul li::marker {
+  color: var(--color-accent-dark);
+}
+
+.text-page-body a {
+  color: var(--color-forest);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.text-page-body a:hover {
+  color: var(--color-forest-dark);
+}
+
+.text-page-body a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.text-page-body blockquote {
+  margin: 1.5em 0;
+  padding: 4px 0 4px 18px;
+  border-left: 4px solid var(--color-lichen);
+  color: var(--color-text-muted);
+}
+
+.text-page-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* ---------- Logga in, Skapa konto och Mitt konto ---------- */
+
+.member-page {
+  padding-block: 8px 24px;
+}
+
+/* Formuläret i ett vitt kort. Kolumnens egen padding från Bootstrap byts mot kortets */
+.member-card {
+  padding: 32px 28px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: 0 6px 24px rgb(18 51 38 / 0.06);
+}
+
+@media (max-width: 575.98px) {
+  .member-card {
+    padding: 24px 18px;
+  }
+}
+
+.member-card h1 {
+  font-size: clamp(30px, 4vw, 38px);
+  line-height: 1.1;
+}
+
+.member-card .form-label {
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.member-card .form-control {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  font: inherit;
+  color: var(--color-text);
+}
+
+/* Bootstraps blå fokusskugga byts mot sajtens orange fokusram */
+.member-card .form-control:focus {
+  border-color: var(--color-forest);
+  box-shadow: none;
+}
+
+.member-card .form-control:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+.member-card .form-text {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* Fel under ett fält: mörkt rött, 7:1 mot vitt */
+.member-card .member-field-error {
+  color: #9b1c1c;
+  font-weight: 600;
+}
+
+.member-alert {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fbe6d2;
+  color: #7a3410;
+  font-weight: 600;
+}
+
+/* Grön knapp som på resten av sajten */
+.member-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--color-forest);
+  border-radius: 8px;
+  background: var(--color-forest);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.member-button:hover {
+  border-color: var(--color-forest-dark);
+  background: var(--color-forest-dark);
+}
+
+/* Logga ut: vit knapp med grön kant */
+.member-button-secondary {
+  background: var(--color-surface);
+  color: var(--color-forest);
+}
+
+.member-button-secondary:hover {
+  background: var(--color-moss);
+  color: var(--color-forest-dark);
+}
+
+.member-button:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+/* "Inget konto? Skapa ett" under formuläret, åtskilt med en linje */
+.member-switch {
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-divider);
+  text-align: center;
+}
+
+.member-switch a {
+  color: var(--color-forest);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.member-switch a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member-button {
+    transition: none;
+  }
+}
