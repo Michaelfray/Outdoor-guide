@@ -78,3 +78,16 @@
     transition: none;
   }
 }
+
+/* "Läs mer om cookies" efter texten (OUT-94) */
+.cookie-consent-text a {
+  margin-left: 4px;
+  color: var(--color-forest);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.cookie-consent-text a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}

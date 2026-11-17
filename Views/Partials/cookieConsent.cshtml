@@ -9,13 +9,22 @@
 	}
 
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// Länken "Läs mer om cookies" går till Integritet och cookies, om sidan finns (OUT-94)
+	var privacyPage = LegalPages.PrivacyPage(Model.StartPage);
 }
 
 @* Ingen modal: rutan ligger sist på sidan och följer med längst ner i fönstret tills besökaren har valt *@
 <div class="cookie-consent" id="cookie-consent" role="region"
 	 aria-label="@Text("Cookie.Label", "Cookies")">
 	<div class="container cookie-consent-inner">
-		<p class="cookie-consent-text">@Text("Cookie.Text", "We use necessary cookies. With your consent, we also use cookies for statistics.")</p>
+		<p class="cookie-consent-text">
+			@Text("Cookie.Text", "We use necessary cookies. With your consent, we also use cookies for statistics.")
+			@if (privacyPage != null)
+			{
+				<a href="@privacyPage.Url()">@Text("Cookie.ReadMore", "Read more about cookies")</a>
+			}
+		</p>
 		<div class="cookie-consent-buttons">
 			<button type="button" class="cookie-consent-button cookie-consent-button-secondary"
 					data-consent="@CookieConsent.Necessary">@Text("Cookie.NecessaryButton", "Only necessary")</button>
