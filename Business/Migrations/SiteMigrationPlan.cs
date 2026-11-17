@@ -68,7 +68,9 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddPlacesDictionaryItems>("add-places-dictionary-items")
                 // För den som testade OUT-101 innan add-text-page-content kom in i main: kör texterna en gång till.
                 // Steget fyller bara tomma fält, så för alla andra gör det ingenting
-                .To<AddTextPageContent>("add-text-page-content-2");
+                .To<AddTextPageContent>("add-text-page-content-2")
+                .To<AddLegalPages>("add-legal-pages")
+                .To<AddCookieSettingsDictionaryItems>("add-cookie-settings-dictionary-items");
         }
     }
 }

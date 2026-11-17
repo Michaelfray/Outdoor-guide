@@ -131,3 +131,25 @@
     transition: none;
   }
 }
+
+/* "Cookie-inställningar" i sidfoten är en knapp, eftersom den gör något i stället för att gå till en sida,
+   men den ska se ut som de andra länkarna där (OUT-94) */
+.site-footer-link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.site-footer-link-button:hover {
+  color: var(--color-sunset);
+}
+
+.site-footer-link-button:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}

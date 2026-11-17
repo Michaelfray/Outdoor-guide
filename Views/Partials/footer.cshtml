@@ -15,6 +15,19 @@
                     {
                         <li><a href="@item.Url()">@item.Name</a></li>
                     }
+
+                    @* Allemansrätten, Integritet och cookies med flera: textsidor som inte ligger i menyn (OUT-47) *@
+                    @foreach (var legalPage in LegalPages.ForFooter(Model.StartPage, Model.MenuItems))
+                    {
+                        <li><a href="@legalPage.Url()">@legalPage.Name</a></li>
+                    }
+
+                    @* Visar cookie-rutan igen, så att besökaren kan ändra sitt val (OUT-94) *@
+                    <li>
+                        <button type="button" class="site-footer-link-button" id="cookie-settings">
+                            @Umbraco.GetDictionaryValueOrDefault("Cookie.Settings", "Cookie settings")
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -25,3 +38,13 @@
         </p>
     </div>
 </footer>
+
+<script>
+    // Tar bort valet i cookie-rutan och laddar om sidan, så att rutan visas igen (OUT-94)
+    document.getElementById('cookie-settings').addEventListener('click', function () {
+        // Samma inställningar som när cookien sattes i cookie-rutan, annars tas den inte bort
+        var secure = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = '@CookieConsent.CookieName=; Max-Age=0; Path=/; SameSite=Lax' + secure;
+        location.reload();
+    });
+</script>
