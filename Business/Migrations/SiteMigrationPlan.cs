@@ -70,7 +70,8 @@ namespace OutdoorGuide.Business.Migrations
                 // Steget fyller bara tomma fält, så för alla andra gör det ingenting
                 .To<AddTextPageContent>("add-text-page-content-2")
                 .To<AddLegalPages>("add-legal-pages")
-                .To<AddCookieSettingsDictionaryItems>("add-cookie-settings-dictionary-items");
+                .To<AddCookieSettingsDictionaryItems>("add-cookie-settings-dictionary-items")
+                .To<AddSiteContent>("add-site-content");
         }
     }
 }
