@@ -7,7 +7,7 @@
 .start-hero {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
   margin-bottom: 40px;
   padding: 28px 20px 32px;
   border-radius: 12px;
@@ -19,6 +19,96 @@
   .start-hero {
     padding: 48px 48px 56px;
   }
+}
+
+/* Texten och sökrutan till vänster. Väderkortet ligger bredvid på dator och under på mobil (OUT-103) */
+.start-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (min-width: 992px) {
+  .start-hero {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .start-hero-text {
+    flex: 1 1 auto;
+  }
+}
+
+/* ---------- Väder i Stockholm (OUT-103) ---------- */
+
+.start-weather {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+@media (min-width: 992px) {
+  .start-weather {
+    flex: 0 0 320px;
+  }
+}
+
+.start-weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.start-weather-header h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.start-weather-source {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.start-weather-days {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.start-weather-days li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: var(--color-moss);
+}
+
+.start-weather-day,
+.start-weather-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.start-weather-desc {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.start-weather-temp {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .start-eyebrow {
@@ -530,5 +620,126 @@
   .start-search button,
   .trail-tile {
     transition: none;
+  }
+}
+
+/* ---------- Säsongstips-kortet under lederna (OUT-103) ---------- */
+
+.start-seasonal {
+  margin-top: 48px;
+}
+
+.seasonal-card {
+  position: relative; /* för stretched-link */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .seasonal-card {
+    flex-direction: row;
+  }
+}
+
+.seasonal-card:hover {
+  border-color: var(--color-forest);
+  box-shadow: 0 10px 24px rgb(18 51 38 / 0.14);
+  transform: translateY(-3px);
+}
+
+.seasonal-card:has(.stretched-link:focus-visible) {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+}
+
+.seasonal-card .stretched-link:focus-visible {
+  outline: none;
+}
+
+/* Höstfärger med ett löv, som "[Foto: höstskog]" i designen */
+.seasonal-card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  background:
+    radial-gradient(circle at 80% 20%, rgb(255 255 255 / 0.2), transparent 55%),
+    linear-gradient(150deg, #8a6a3a, #6b4a24);
+  color: rgb(255 255 255 / 0.6);
+}
+
+@media (min-width: 768px) {
+  .seasonal-card-media {
+    flex: 0 0 280px;
+  }
+}
+
+.seasonal-card-media svg {
+  width: 72px;
+  height: 72px;
+  transition: transform 0.3s ease;
+}
+
+.seasonal-card:hover .seasonal-card-media svg {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.seasonal-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+}
+
+.seasonal-card-eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-dark);
+}
+
+.seasonal-card-title {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 28px);
+}
+
+.seasonal-card-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.seasonal-card:hover .seasonal-card-title a {
+  color: var(--color-forest);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.seasonal-card-intro {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.seasonal-card-more {
+  font-weight: 600;
+  color: var(--color-forest);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-card,
+  .seasonal-card-media svg {
+    transition: none;
+  }
+
+  .seasonal-card:hover,
+  .seasonal-card:hover .seasonal-card-media svg {
+    transform: none;
   }
 }
