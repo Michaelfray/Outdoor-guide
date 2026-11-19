@@ -82,7 +82,16 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddNewsletterType>("add-newsletter-type")
                 .To<AddUnsubscribePage>("add-unsubscribe-page")
                 .To<AddUnsubscribeDictionaryItems>("add-unsubscribe-dictionary-items")
-                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text");
+                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text")
+                .To<AddStartPageTitle>("add-start-page-title")
+                .To<AddStartHeroDictionaryItems>("add-start-hero-dictionary-items")
+                // För den som testade OUT-107 innan sökorden, nyhetsbrevet och avregistreringen kom in i main: kör de stegen en gång till.
+                // Alla kollar vad som redan finns, så för alla andra gör de ingenting
+                .To<AddSearchResultDictionaryItems>("add-search-result-dictionary-items-2")
+                .To<AddNewsletterType>("add-newsletter-type-2")
+                .To<AddUnsubscribePage>("add-unsubscribe-page-2")
+                .To<AddUnsubscribeDictionaryItems>("add-unsubscribe-dictionary-items-2")
+                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text-2");
         }
     }
 }
