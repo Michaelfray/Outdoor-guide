@@ -16,7 +16,7 @@
 		Model.TotalTrails);
 }
 
-@* Den gröna toppen enligt designen (Startsida – dator och mobil) *@
+@* Den gröna toppen enligt designen (Startsida – dator och mobil), med en bild från Tyresta bakom (OUT-107) *@
 <section class="start-hero" aria-labelledby="start-heading">
 	<div class="start-hero-text">
 		<p class="start-eyebrow">@Text("Start.Eyebrow", "Trails in Stockholm County")</p>
@@ -48,6 +48,13 @@
 	{
 		@await Html.PartialAsync("startWeather", Model.StockholmWeather)
 	}
+
+	@* Bilden bakom toppen ligger i start.css (OUT-107). Licensen CC BY-SA kräver fotografens namn och en länk *@
+	<p class="start-hero-credit">
+		@Text("Start.PhotoCredit", "Photo"):
+		<a href="https://commons.wikimedia.org/wiki/File:Stensj%C3%B6n,_Tyresta_national_park,_2007-07-31,_northern_shore_on_Stensj%C3%B6borg,_view_southeast.jpeg">TimSE</a>,
+		<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>
+	</p>
 </section>
 
 @if (Model.HasTrails)

@@ -77,7 +77,9 @@ namespace OutdoorGuide.Business.Migrations
                 // Steget fyller bara tomma fält och lägger bara in bilder som saknas, så för alla andra gör det ingenting
                 .To<AddSiteContent>("add-site-content-2")
                 .To<AddSiteContent>("add-site-content-3")
-                .To<AddCategoryTrails>("add-category-trails");
+                .To<AddCategoryTrails>("add-category-trails")
+                .To<AddStartPageTitle>("add-start-page-title")
+                .To<AddStartHeroDictionaryItems>("add-start-hero-dictionary-items");
         }
     }
 }
