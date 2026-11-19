@@ -2,20 +2,57 @@
 @inherits UmbracoViewPage<BlockListItem<GalleryBlock>>
 
 @{
+    string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
     // Only images that still exist in the media library
     var images = Model.Content.Images?.Where(image => image != null).ToList() ?? [];
 
     if (images.Count == 0) { return; }
+
+    // A unique id per block, so that two galleries on the same page don't control each other
+    var id = $"gallery-{Model.Content.Key:N}";
+    var caption = Text("Trail.Gallery", "Photos from the trail");
+    var hasControls = images.Count > 1;
 }
 
+@* The gallery as a Bootstrap carousel (OUT-109). No automatic sliding: the visitor changes photo with the arrows,
+   the dots, the arrow keys or by swiping. The photo that is shown is announced to screen readers (aria-live) *@
 <figure class="block-gallery">
-    <div class="block-gallery__grid">
-        @foreach (var image in images)
+    <div id="@id" class="carousel slide block-gallery__carousel" data-bs-ride="false" data-bs-interval="false"
+         aria-roledescription="carousel" aria-label="@caption">
+        <div class="carousel-inner" aria-live="polite">
+            @for (var i = 0; i < images.Count; i++)
+            {
+                var image = images[i];
+                <div class="carousel-item@(i == 0 ? " active" : null)" role="group" aria-roledescription="slide"
+                     aria-label="@string.Format(Text("Trail.GallerySlide", "Photo {0} of {1}"), i + 1, images.Count)">
+                    @* Umbraco makes a smaller copy, so we don't send the full-size photo. Only the first photo loads at once *@
+                    <img src="@image.GetCropUrl(width: 1200, height: 800)" alt="@image.Name" width="1200" height="800"
+                         loading="@(i == 0 ? "eager" : "lazy")" />
+                </div>
+            }
+        </div>
+
+        @if (hasControls)
         {
-            @* Umbraco makes a smaller copy, so we don't send the full-size photo *@
-            <img src="@image.GetCropUrl(width: 600, height: 400)" alt="@image.Name" width="600" height="400"
-                 loading="lazy" />
+            <button class="carousel-control-prev" type="button" data-bs-target="#@id" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">@Text("Trail.GalleryPrevious", "Previous photo")</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#@id" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">@Text("Trail.GalleryNext", "Next photo")</span>
+            </button>
+
+            <div class="carousel-indicators">
+                @for (var i = 0; i < images.Count; i++)
+                {
+                    <button type="button" data-bs-target="#@id" data-bs-slide-to="@i"
+                            class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)"
+                            aria-label="@string.Format(Text("Trail.GallerySlide", "Photo {0} of {1}"), i + 1, images.Count)"></button>
+                }
+            </div>
         }
     </div>
-    <figcaption class="block-gallery__caption">@Umbraco.GetDictionaryValueOrDefault("Trail.Gallery", "Photos from the trail")</figcaption>
+    <figcaption class="block-gallery__caption">@caption</figcaption>
 </figure>

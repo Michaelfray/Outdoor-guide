@@ -97,7 +97,8 @@ namespace OutdoorGuide.Business.Migrations
                 // För den som testade OUT-108 innan OUT-107 kom in i main: kör startsidans steg en gång till.
                 // Stegen kollar vad som redan finns, så för alla andra gör de ingenting
                 .To<AddStartPageTitle>("add-start-page-title-2")
-                .To<AddStartHeroDictionaryItems>("add-start-hero-dictionary-items-2");
+                .To<AddStartHeroDictionaryItems>("add-start-hero-dictionary-items-2")
+                .To<AddGalleryCarouselDictionaryItems>("add-gallery-carousel-dictionary-items");
         }
     }
 }
