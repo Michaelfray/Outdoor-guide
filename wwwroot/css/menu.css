@@ -72,8 +72,34 @@
   list-style: none;
 }
 
+/* No underline on the languages, as the supervisor asked. The current language is bold and orange, like the
+   current page in the menu, and the other gets an underline only on hover or keyboard focus.
+   A thin line separates the two: "Svenska | English" */
+.site-menu-lang li + li {
+  padding-left: 1rem;
+  border-left: 1px solid rgb(255 255 255 / 0.4);
+}
+
 .site-menu-lang a {
   color: #fff;
+  text-decoration: none;
+  text-underline-offset: 0.3rem;
+}
+
+.site-menu-lang a:hover,
+.site-menu-lang a:focus-visible {
+  text-decoration: underline;
+}
+
+.site-menu-lang a[aria-current="page"] {
+  color: var(--color-sunset);
+  font-weight: 600;
+}
+
+.site-menu-lang a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* The right end of the menu bar: languages, then Logga in or Mitt konto (OUT-54) */
