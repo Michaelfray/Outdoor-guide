@@ -1,0 +1,42 @@
+@using OutdoorGuide.Models
+@inherits UmbracoViewPage<CategoryCard>
+
+@{
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// "1 led" eller "5 leder", som på kommunkorten
+	var count = Model.TrailCount == 1
+		? Text("Places.TrailCountOne", "1 trail")
+		: string.Format(Text("Places.TrailCount", "{0} trails"), Model.TrailCount);
+
+	var activityClass = string.IsNullOrEmpty(Model.Activity) ? "" : $" trail-tile-media-{Model.Activity}";
+	var image = Model.Cover?.Image;
+}
+
+@* Ett kort för en aktivitet eller en undersida (OUT-105). Samma klasser som led- och kommunkorten, så att de ser likadana ut.
+   Bilden är från en av lederna. Utan bild får kortet aktivitetens färg och ikon *@
+<article class="trail-tile">
+	<div class="trail-tile-media@(activityClass)">
+		@if (image != null)
+		{
+			<img src="@image.GetCropUrl(width: 640, height: 400)" alt="" loading="lazy" width="640" height="400" />
+		}
+		else
+		{
+			@await Html.PartialAsync("activityIcon", Model.Activity ?? "")
+		}
+	</div>
+
+	<div class="trail-tile-body">
+		<h3 class="trail-tile-title"><a href="@Model.Page.Url()" class="stretched-link">@Model.Page.Name</a></h3>
+
+		@if (!string.IsNullOrWhiteSpace(Model.Intro))
+		{
+			<p class="trail-tile-place">@Model.Intro</p>
+		}
+
+		<ul class="trail-tile-tags">
+			<li class="trail-tag">@count</li>
+		</ul>
+	</div>
+</article>

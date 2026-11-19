@@ -1,32 +1,46 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailCategoryViewModel>
 
 @{
 	Layout = "root.cshtml";
 
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+
+	// "5 leder" eller "1 led", som rubriken på kommunsidan
+	var heading = Model.Trails.Count == 1
+		? Text("Places.TrailCountOne", "1 trail")
+		: string.Format(Text("Places.TrailCount", "{0} trails"), Model.Trails.Count);
 }
 
-<h1 class="mb-3">@Model.Content.Name</h1>
+@* Undersidan i samma stil som kommunsidan (OUT-105): brödsmulor, rubrik med ingress och lederna som kort *@
+@await Html.PartialAsync("breadcrumbs", Model.Content)
 
-@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
-{
-	<p class="lead">@Model.Content.Intro</p>
-}
+<header class="place-header">
+	<h1>@Model.Content.Name</h1>
+	@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+	{
+		<p class="place-intro">@Model.Content.Intro</p>
+	}
+</header>
 
-<section class="mt-4" aria-labelledby="category-trails-heading">
-	<h2 id="category-trails-heading">@Text("TrailCategory.Trails", "Trails")</h2>
-
+<section class="start-trails" aria-labelledby="category-trails-heading">
 	@if (Model.Trails.Count == 0)
 	{
-		<p>@Text("TrailCategory.NoTrails", "There are no trails here yet.")</p>
+		<h2 id="category-trails-heading" class="visually-hidden">@Text("TrailCategory.Trails", "Trails")</h2>
+		<p class="start-trails-empty">@Text("TrailCategory.NoTrails", "There are no trails here yet.")</p>
 	}
 	else
 	{
-		<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
+		<div class="start-trails-header">
+			<h2 id="category-trails-heading">@heading</h2>
+		</div>
+
+		<ul class="trail-grid">
 			@foreach (var trail in Model.Trails)
 			{
-				<li class="col">@await Html.PartialAsync("trailCard", trail)</li>
+				@* Betyget skickas med till kortet. Leder utan röster får inget, och då visas ingen stjärna *@
+				var cardData = new ViewDataDictionary(ViewData) { ["Rating"] = Model.Ratings.GetValueOrDefault(trail.Key) };
+				<li>@await Html.PartialAsync("trailCard", trail, cardData)</li>
 			}
 		</ul>
 	}
