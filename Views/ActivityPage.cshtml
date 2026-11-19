@@ -1,4 +1,4 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ActivityPageViewModel>
 
 @{
@@ -7,50 +7,50 @@
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 }
 
-<h1 class="mb-3">@Model.Content.Name</h1>
+@* Aktivitetssidan i samma stil som kommunsidan (OUT-105): undersidorna som kort, och sedan alla leder med betyg *@
+@await Html.PartialAsync("breadcrumbs", Model.Content)
 
-@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
-{
-	<p class="lead">@Model.Content.Intro</p>
-}
+<header class="place-header">
+	<h1>@Model.Content.Name</h1>
+	@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
+	{
+		<p class="place-intro">@Model.Content.Intro</p>
+	}
+</header>
 
 @if (Model.Categories.Count > 0)
 {
-	<section class="mt-4" aria-labelledby="activity-categories-heading">
-		<h2 id="activity-categories-heading">@Text("Activity.Categories", "Types of trips")</h2>
+	<section class="activity-categories" aria-labelledby="activity-categories-heading">
+		<div class="start-trails-header">
+			<h2 id="activity-categories-heading">@Text("Activity.Categories", "Types of trips")</h2>
+		</div>
 
-		<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
+		<ul class="trail-grid">
 			@foreach (var category in Model.Categories)
 			{
-				<li class="col">
-					<article class="card h-100">
-						<div class="card-body">
-							<h3 class="h5 card-title"><a href="@category.Url()" class="stretched-link">@category.Name</a></h3>
-							@if (!string.IsNullOrWhiteSpace(category.Intro))
-							{
-								<p class="card-text">@category.Intro</p>
-							}
-						</div>
-					</article>
-				</li>
+				<li>@await Html.PartialAsync("categoryCard", category)</li>
 			}
 		</ul>
 	</section>
 }
 
-<section class="mt-5" aria-labelledby="activity-trails-heading">
-	<h2 id="activity-trails-heading">@Text("Activity.Trails", "All trails")</h2>
+<section class="start-trails" aria-labelledby="activity-trails-heading">
+	<div class="start-trails-header">
+		<h2 id="activity-trails-heading">@Text("Activity.Trails", "All trails")</h2>
+	</div>
 
 	@if (Model.Trails.Count == 0)
 	{
-		<p>@Text("Activity.NoTrails", "There are no trails for this activity yet.")</p>
+		<p class="start-trails-empty">@Text("Activity.NoTrails", "There are no trails for this activity yet.")</p>
 	}
 	else
 	{
-		<ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
+		<ul class="trail-grid">
 			@foreach (var trail in Model.Trails)
 			{
-				<li class="col">@await Html.PartialAsync("trailCard", trail)</li>
+				@* Betyget skickas med till kortet. Leder utan röster får inget, och då visas ingen stjärna *@
+				var cardData = new ViewDataDictionary(ViewData) { ["Rating"] = Model.Ratings.GetValueOrDefault(trail.Key) };
+				<li>@await Html.PartialAsync("trailCard", trail, cardData)</li>
 			}
 		</ul>
 	}

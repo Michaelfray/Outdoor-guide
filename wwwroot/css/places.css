@@ -75,3 +75,8 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Undersidorna på aktivitetssidan, före Alla leder (OUT-105) */
+.activity-categories {
+  margin-bottom: 48px;
+}

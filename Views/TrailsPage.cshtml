@@ -1,30 +1,27 @@
-﻿@using OutdoorGuide.Models.ViewModels
+@using OutdoorGuide.Models.ViewModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<TrailsPageViewModel>
 
 @{
 	Layout = "root.cshtml";
 }
 
-<h1 class="mb-3">@Model.Content.Name</h1>
+@* Leder i samma stil som Platser och kommunsidan (OUT-105): brödsmulor, rubrik med ingress och ett kort per aktivitet *@
+@await Html.PartialAsync("breadcrumbs", Model.Content)
 
-@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
-{
-	<p class="lead">@Model.Content.Intro</p>
-}
-
-<ul class="row row-cols-1 row-cols-md-2 g-4 list-unstyled mt-2">
-	@foreach (var activity in Model.ActivityPages)
+<header class="place-header">
+	<h1>@Model.Content.Name</h1>
+	@if (!string.IsNullOrWhiteSpace(Model.Content.Intro))
 	{
-		<li class="col">
-			<article class="card h-100">
-				<div class="card-body">
-					<h2 class="h4 card-title"><a href="@activity.Url()" class="stretched-link">@activity.Name</a></h2>
-					@if (!string.IsNullOrWhiteSpace(activity.Intro))
-					{
-						<p class="card-text">@activity.Intro</p>
-					}
-				</div>
-			</article>
-		</li>
+		<p class="place-intro">@Model.Content.Intro</p>
 	}
-</ul>
+</header>
+
+@if (Model.Activities.Count > 0)
+{
+	<ul class="trail-grid">
+		@foreach (var activity in Model.Activities)
+		{
+			<li>@await Html.PartialAsync("categoryCard", activity)</li>
+		}
+	</ul>
+}
