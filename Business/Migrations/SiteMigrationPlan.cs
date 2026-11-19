@@ -75,7 +75,8 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddStartWeatherDictionaryItems>("add-start-weather-dictionary-items")
                 // För den som testade OUT-103 innan add-site-content kom in i main: kör innehållet en gång till.
                 // Steget fyller bara tomma fält och lägger bara in bilder som saknas, så för alla andra gör det ingenting
-                .To<AddSiteContent>("add-site-content-2");
+                .To<AddSiteContent>("add-site-content-2")
+                .To<AddSiteContent>("add-site-content-3");
         }
     }
 }
