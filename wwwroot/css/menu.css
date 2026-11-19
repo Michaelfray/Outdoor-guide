@@ -16,12 +16,13 @@
   text-decoration-thickness: 2px;
 }
 
-/* Underline on hover, on keyboard focus, on the current page and while the mega menu is open */
+/* Orange and underlined on hover, on keyboard focus, on the current page and while the mega menu is open (OUT-106).
+   --color-sunset has 4.6:1 contrast against the green menu bar (AA). --color-accent is too dark against green */
 .site-menu .nav-link:hover,
 .site-menu .nav-link:focus-visible,
 .site-menu .nav-link.active,
 .site-menu .nav-link.show {
-  color: #fff;
+  color: var(--color-sunset);
   text-decoration-line: underline;
 }
 
