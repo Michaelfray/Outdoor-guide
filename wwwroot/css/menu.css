@@ -29,6 +29,41 @@
   font-weight: 600;
 }
 
+/* On large screens the open mega menu pushes the page down instead of covering it (OUT-112).
+   The script in menu.cshtml sets --megamenu-height to the height of the open panel, and 0 when it closes */
+@media (min-width: 992px) {
+  .site-menu {
+    margin-bottom: var(--megamenu-height, 0px);
+    transition: margin-bottom 0.25s ease;
+  }
+
+  /* The panel glides down from the menu bar at the same pace as the page moves */
+  .site-megamenu.show {
+    animation: site-megamenu-open 0.25s ease;
+  }
+}
+
+@keyframes site-megamenu-open {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* No movement for those who have turned it off: the panel appears and the page jumps down at once */
+@media (prefers-reduced-motion: reduce) {
+  .site-menu {
+    transition: none;
+  }
+
+  .site-megamenu.show {
+    animation: none;
+  }
+}
+
 /* The mega menu: a white panel straight under the menu bar */
 .site-megamenu {
   margin-top: 0;
