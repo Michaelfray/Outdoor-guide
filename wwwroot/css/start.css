@@ -3,22 +3,63 @@
 
 /* ---------- Den gröna toppen ---------- */
 
-/* Ett grönt kort i stället för ett band över hela bredden, eftersom root.cshtml lägger sidan i en .container */
+/* Ett grönt kort i stället för ett band över hela bredden, eftersom root.cshtml lägger sidan i en .container.
+   Bakom ligger en bild från Stensjön i Tyresta, under en mörkgrön ton så att texten går att läsa (OUT-107).
+   Tonen är 80 % där texten står: vit text har då minst 7.3:1 och den ljusgröna ingressen 5.5:1, mätt mot bildens
+   ljusaste pixel. Utan bilden syns bara den gröna färgen */
 .start-hero {
+  --hero-tint: rgb(18 51 38 / 0.8);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 24px;
   margin-bottom: 40px;
-  padding: 28px 20px 32px;
+  padding: 28px 20px 48px;
   border-radius: 12px;
-  background: var(--color-forest);
+  background:
+    linear-gradient(var(--hero-tint), var(--hero-tint)),
+    url("../images/start-hero.jpg") center 60% / cover no-repeat,
+    var(--color-forest);
   color: #fff;
 }
 
 @media (min-width: 768px) {
   .start-hero {
-    padding: 48px 48px 56px;
+    padding: 48px 48px 64px;
   }
+}
+
+/* På dator står texten till vänster, så tonen blir ljusare till höger, bakom väderkortet, och bilden syns mer */
+@media (min-width: 992px) {
+  .start-hero {
+    background:
+      linear-gradient(90deg, var(--hero-tint) 0%, var(--hero-tint) 60%, rgb(18 51 38 / 0.45) 100%),
+      url("../images/start-hero.jpg") center 60% / cover no-repeat,
+      var(--color-forest);
+  }
+}
+
+/* Fotografens namn längst ner till höger, på en egen mörk bakgrund så att den går att läsa var den än hamnar */
+.start-hero-credit {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  margin: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(18 51 38 / 0.85);
+  color: var(--color-lichen);
+  font-size: 12px;
+}
+
+.start-hero-credit a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
+
+.start-hero-credit a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
 }
 
 /* Texten och sökrutan till vänster. Väderkortet ligger bredvid på dator och under på mobil (OUT-103) */
@@ -111,13 +152,18 @@
   font-weight: 600;
 }
 
+/* Orange på en mörkgrön etikett, så att den har 6.6:1 även när bilden bakom är ljus (OUT-107) */
 .start-eyebrow {
+  align-self: flex-start;
   margin: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--color-forest-dark);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-sunset); /* 6.4:1 mot den gröna */
+  color: var(--color-sunset);
 }
 
 .start-hero h1 {
