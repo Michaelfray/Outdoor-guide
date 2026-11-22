@@ -119,3 +119,36 @@
         </div>
     </div>
 </nav>
+
+@* The mega menu pushes the page down instead of covering it (OUT-112). On large screens the panel is absolutely
+   positioned under the menu bar, so we give the menu bar a bottom margin as tall as the open panel. menu.css animates
+   the margin and the panel together. On small screens the panel is already inside the open menu, so nothing happens *@
+<script>
+    (function () {
+        var menu = document.querySelector('.site-menu');
+        var toggle = menu && menu.querySelector('[data-bs-toggle="dropdown"]');
+        var panel = toggle && toggle.parentElement.querySelector('.site-megamenu');
+
+        if (!panel) {
+            return;
+        }
+
+        var desktop = window.matchMedia('(min-width: 992px)');
+
+        function update() {
+            var open = desktop.matches && panel.classList.contains('show');
+            // From the bottom of the menu bar to the bottom of the panel, so the small gap above the panel counts too
+            var height = open ? panel.getBoundingClientRect().bottom - menu.getBoundingClientRect().bottom : 0;
+            menu.style.setProperty('--megamenu-height', Math.max(0, height) + 'px');
+        }
+
+        // Bootstrap fires these on the button. "shown" comes after the panel is visible, so its height can be measured
+        toggle.addEventListener('shown.bs.dropdown', update);
+        toggle.addEventListener('hide.bs.dropdown', function () {
+            menu.style.setProperty('--megamenu-height', '0px');
+        });
+
+        // The panel gets taller or shorter when the window changes width, and disappears into the hamburger menu
+        window.addEventListener('resize', update);
+    })();
+</script>
