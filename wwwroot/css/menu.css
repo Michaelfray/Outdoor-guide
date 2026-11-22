@@ -9,21 +9,24 @@
   font-weight: 700;
 }
 
-/* Menu links: white, with room for a thick underline */
+/* Menu links: white and never underlined (supervisor feedback, OUT-113) */
 .site-menu .nav-link {
   color: #fff;
-  text-underline-offset: 0.4rem;
-  text-decoration-thickness: 2px;
+  text-decoration: none;
 }
 
-/* Orange and underlined on hover, on keyboard focus, on the current page and while the mega menu is open (OUT-106).
+/* Orange on hover, on keyboard focus, on the current page and while the mega menu is open (OUT-106).
    --color-sunset has 4.6:1 contrast against the green menu bar (AA). --color-accent is too dark against green */
 .site-menu .nav-link:hover,
 .site-menu .nav-link:focus-visible,
 .site-menu .nav-link.active,
 .site-menu .nav-link.show {
   color: var(--color-sunset);
-  text-decoration-line: underline;
+}
+
+/* The current page is also bold, so it doesn't rely on colour alone */
+.site-menu .nav-link.active {
+  font-weight: 600;
 }
 
 /* The mega menu: a white panel straight under the menu bar */
@@ -47,20 +50,21 @@
   text-decoration: none;
 }
 
-/* Level 3 links in the mega menu (Dagsturer ...): green and underlined, as in the design */
+/* Level 3 links in the mega menu (Dagsturer ...): green, without underline (OUT-113) */
 .site-megamenu .dropdown-item {
   padding: 0.25rem 0;
   color: var(--color-forest);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
   white-space: normal; /* let long names wrap instead of overflowing */
 }
 
-/* Bootstrap gives dropdown items a grey background on hover; we only darken the text */
+/* Bootstrap gives dropdown items a grey background on hover; we change the text colour instead, to the rust orange
+   that has enough contrast on white. Without an underline the colour change has to be clear */
 .site-megamenu .dropdown-item:hover,
-.site-megamenu .dropdown-item:focus-visible {
+.site-megamenu .dropdown-item:focus-visible,
+.site-megamenu-heading:hover {
   background: none;
-  color: var(--color-forest-dark);
+  color: var(--color-accent-dark);
 }
 
 /* The language switcher: the languages side by side instead of as a bullet list */
@@ -72,8 +76,33 @@
   list-style: none;
 }
 
+/* No underline on the languages, as the supervisor asked (OUT-113). The current language is bold and orange, like
+   the current page in the menu, and the other turns orange on hover or keyboard focus.
+   A thin line separates the two: "Svenska | English" */
+.site-menu-lang li + li {
+  padding-left: 1rem;
+  border-left: 1px solid rgb(255 255 255 / 0.4);
+}
+
 .site-menu-lang a {
   color: #fff;
+  text-decoration: none;
+}
+
+.site-menu-lang a:hover,
+.site-menu-lang a:focus-visible {
+  color: var(--color-sunset);
+}
+
+.site-menu-lang a[aria-current="page"] {
+  color: var(--color-sunset);
+  font-weight: 600;
+}
+
+.site-menu-lang a:focus-visible {
+  outline: 3px solid var(--color-sunset);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* The right end of the menu bar: languages, then Logga in or Mitt konto (OUT-54) */
