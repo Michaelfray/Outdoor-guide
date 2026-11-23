@@ -63,6 +63,7 @@ public class SearchService(
 			}
 
 			hits.Add(new SearchHit(
+				page,
 				page.Name(cultureInfo.Name),
 				page.Url(cultureInfo.Name),
 				page is Trail ? SearchHitType.Trail : SearchHitType.Municipality));

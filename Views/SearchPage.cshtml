@@ -6,32 +6,61 @@
 
 	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
 
-	string TypeText(SearchHitType type) => type == SearchHitType.Trail
-		? Text("Search.Trail", "Trail")
-		: Text("Search.Municipality", "Municipality");
+	// "3 träffar för ”nacka”" eller "1 träff för ”nacka”"
+	var heading = Model.Results.Count == 1
+		? string.Format(Text("Search.ResultsForOne", "1 result for “{0}”"), Model.Query)
+		: string.Format(Text("Search.ResultsFor", "{0} results for “{1}”"), Model.Results.Count, Model.Query);
 }
 
-<h1>@Model.Content.Name</h1>
+@* Söksidan i sajtens stil (OUT-110): sökrutan som på startsidan och träffarna som kort *@
+<header class="place-header">
+	<h1>@Model.Content.Name</h1>
 
-<form method="get" role="search">
-	<p>
+	<form class="start-search search-page-form" method="get" role="search">
 		<label for="search-query">@Text("Search.Label", "Search")</label>
-		<input type="search" id="search-query" name="q" value="@Model.Query" maxlength="100"
-			   placeholder="@Text("Search.Placeholder", "Search trail or municipality")" />
-		<button type="submit">@Text("Search.SearchButton", "Search")</button>
-	</p>
-</form>
+		<div class="start-search-row">
+			<input type="search" id="search-query" name="q" value="@Model.Query" maxlength="100"
+				   placeholder="@Text("Search.Placeholder", "Search trail or municipality")" />
+			<button type="submit">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+				@Text("Search.SearchButton", "Search")
+			</button>
+		</div>
+	</form>
+</header>
 
-@if (Model.Results.Count > 0)
+@if (Model.Query.Length > 0)
 {
-	<ul>
-		@foreach (var hit in Model.Results)
+	<section class="start-trails" aria-labelledby="search-results-heading">
+		@if (Model.Results.Count > 0)
 		{
-			<li><a href="@hit.Url">@hit.Name</a> (@TypeText(hit.Type))</li>
+			<div class="start-trails-header">
+				<h2 id="search-results-heading">@heading</h2>
+			</div>
+
+			<ul class="trail-grid">
+				@foreach (var hit in Model.Results)
+				{
+					<li>
+						@if (hit.Page is Trail trail)
+						{
+							@await Html.PartialAsync("trailCard", trail)
+						}
+						else if (hit.Page is Municipality municipality)
+						{
+							@await Html.PartialAsync("municipalityCard", MunicipalityCard.From(municipality))
+						}
+					</li>
+				}
+			</ul>
 		}
-	</ul>
-}
-else if (Model.Query.Length > 0)
-{
-	<p>@Text("Search.NoResults", "No results")</p>
+		else
+		{
+			@* Samma streckade ruta som när filtret inte hittar något *@
+			<div class="start-trails-empty">
+				<h2 id="search-results-heading" class="h4">@string.Format(Text("Search.NoResultsFor", "No results for “{0}”"), Model.Query)</h2>
+				<p class="mb-0">@Text("Search.NoResultsHint", "Check the spelling, or search for a municipality, for example Nacka.")</p>
+			</div>
+		}
+	</section>
 }
