@@ -66,6 +66,16 @@ Den som redan har kört sitt eget steg lokalt har sin databas på det sista steg
 - **Texter och sidor som skrivs i backoffice** stannar i den egna databasen. Lägg det som alla behöver i en migration.
 - **Media** (`wwwroot/media`).
 
+## Mejl lokalt (smtp4dev)
+
+Lokalt skickas mejl till smtp4dev, en låtsas-mejlserver. Inget går ut på riktigt.
+
+1. Installera en gång: `dotnet tool install -g Rnwood.Smtp4dev`
+2. Starta: `smtp4dev`
+3. Mejlen syns på `http://localhost:5000`.
+
+Inställningarna står under `Umbraco:CMS:Global:Smtp` i `appsettings.Development.json`. En riktig SMTP-server med lösenord läggs i `appsettings.Local.json`, som är gitignorerad.
+
 ## EF Core (senare)
 
 EF Core-migrations är en annan sak än Umbraco-migrations. De skapar egna tabeller för data som besökare skickar in, till exempel formulärsvar, och kursen kräver EF Core för "your own data". De har en egen `DbContext` och genereras med `dotnet ef migrations add`. Se lärarens `ContactFormDbContext` i `schele/umbraco26`. Vi lägger till dem när vi behöver dem.
