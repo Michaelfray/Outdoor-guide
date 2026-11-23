@@ -20,5 +20,6 @@ public class NewsletterComposer : IComposer
 		builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, NewsletterMigrationHandler>();
         builder.Services.TryAddSingleton(TimeProvider.System);
         builder.Services.AddScoped<INewsletterService, NewsletterService>();
+        builder.Services.AddScoped<INewsletterMailService, NewsletterMailService>();
 	}
 }
