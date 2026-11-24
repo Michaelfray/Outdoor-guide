@@ -79,9 +79,17 @@ namespace OutdoorGuide.Business.Data.Migrations.Newsletter
                         .HasMaxLength(254)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UnsubscribeToken")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UnsubscribeToken")
                         .IsUnique();
 
                     b.ToTable("newsletterSubscription", (string)null);

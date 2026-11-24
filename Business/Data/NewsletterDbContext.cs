@@ -27,6 +27,11 @@ public class NewsletterDbContext(DbContextOptions<NewsletterDbContext> options) 
 
 			// Samma adress får bara finnas en gång
 			subscription.HasIndex(x => x.Email).IsUnique();
+
+			
+			// Länken i mejlet hittar prenumeranten med token, så den måste vara unik (OUT-118)
+			subscription.Property(x => x.UnsubscribeToken).HasMaxLength(NewsletterSubscription.UnsubscribeTokenLength).IsRequired();
+			subscription.HasIndex(x => x.UnsubscribeToken).IsUnique();
 		});
 
 		modelBuilder.Entity<NewsletterSend>(send =>

@@ -32,6 +32,7 @@ public class NewsletterService(
 					Email = normalizedEmail,
 					Culture = Truncate(culture, NewsletterSubscription.CultureMaxLength),
 					CreatedUtc = timeProvider.GetUtcNow().UtcDateTime,
+					UnsubscribeToken = NewsletterSubscription.NewUnsubscribeToken(),
 				});
 
 				await db.SaveChangesAsync();
@@ -48,6 +49,29 @@ public class NewsletterService(
 			logger.LogInformation(ex, "En anmälan till nyhetsbrevet fanns redan. Inget sparades.");
 			return false;
 		}
+	}
+
+		public async Task<bool> UnsubscribeAsync(string token)
+	{
+		token = token.Trim();
+
+		if (token.Length == 0 || token.Length > NewsletterSubscription.UnsubscribeTokenLength)
+		{
+			return false;
+		}
+
+		using var scope = scopeProvider.CreateScope();
+
+		var removed = await scope.ExecuteWithContextAsync(async db =>
+			await db.Subscriptions.Where(x => x.UnsubscribeToken == token).ExecuteDeleteAsync() > 0);
+
+		scope.Complete();
+
+		logger.LogInformation(removed
+			? "En prenumeration på nyhetsbrevet avslutades."
+			: "Ingen prenumeration med den token. Länken var redan använd eller fel.");
+
+		return removed;
 	}
 
 	private static string Truncate(string value, int maxLength)
