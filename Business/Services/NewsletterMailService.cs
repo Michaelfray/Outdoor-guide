@@ -12,23 +12,62 @@ using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace OutdoorGuide.Business.Services;
 
-/// <summary>Skickar ett publicerat nyhetsbrev som HTML-mejl till varje prenumerant, på prenumerantens språk (OUT-116).</summary>
+/// <summary>
+/// Skickar ett publicerat nyhetsbrev som HTML-mejl till varje prenumerant, på prenumerantens språk (OUT-116).
+/// Sparar vilka nyhetsbrev som är köade och vilka mejl som har gått fram, så att inget skickas två gånger (OUT-117).
+/// </summary>
 public class NewsletterMailService(
 	IEFCoreScopeProvider<NewsletterDbContext> scopeProvider,
 	IUmbracoContextFactory umbracoContextFactory,
 	IEmailSender emailSender,
+	TimeProvider timeProvider,
 	ILogger<NewsletterMailService> logger) : INewsletterMailService
 {
 	// Används när nyhetsbrevet inte är publicerat på prenumerantens språk
 	private const string DefaultCulture = "en-US";
 	private const string EmailType = "Newsletter";
 
-	public async Task<int> SendAsync(Guid newsletterKey)
+	public async Task<bool> TryMarkQueuedAsync(Guid newsletterKey)
 	{
+		try
+		{
+			using var scope = scopeProvider.CreateScope();
+
+			var added = await scope.ExecuteWithContextAsync(async db =>
+			{
+				if (await db.Sends.AnyAsync(x => x.NewsletterKey == newsletterKey))
+				{
+					return false;
+				}
+
+				db.Sends.Add(new NewsletterSend
+				{
+					NewsletterKey = newsletterKey,
+					QueuedUtc = timeProvider.GetUtcNow().UtcDateTime,
+				});
+
+				await db.SaveChangesAsync();
+
+				return true;
+			});
+
+			scope.Complete();
+
+			return added;
+		}
+		catch (DbUpdateException)
+		{
+			// Två publiceringar samtidigt: det unika indexet stoppade den andra
+			return false;
+		}
+	}
+
+	public async Task<NewsletterSendResult> SendAsync(Guid newsletterKey)
+	{
+		// Ett fel här gör att Hangfire försöker igen, och jobbet kan köras om när felet är rättat
 		if (!emailSender.CanSendRequiredEmail())
 		{
-			logger.LogWarning("SMTP är inte inställt, så nyhetsbrevet {Key} skickades inte.", newsletterKey);
-			return 0;
+			throw new InvalidOperationException("SMTP är inte inställt, så nyhetsbrevet kan inte skickas.");
 		}
 
 		// Jobbet körs utanför en webbförfrågan, så Umbraco-kontexten skapas här
@@ -36,18 +75,18 @@ public class NewsletterMailService(
 
 		if (contextReference.UmbracoContext.Content?.GetById(newsletterKey) is not Newsletter newsletter)
 		{
-			logger.LogWarning("Nyhetsbrevet {Key} finns inte eller är inte publicerat.", newsletterKey);
-			return 0;
+			throw new InvalidOperationException($"Nyhetsbrevet {newsletterKey} finns inte eller är inte publicerat.");
 		}
 
-		var sent = 0;
+		int sent = 0, failed = 0, skipped = 0;
 
-		foreach (var subscription in await GetSubscriptionsAsync())
+		foreach (var subscription in await GetPendingSubscriptionsAsync(newsletterKey))
 		{
 			var culture = newsletter.IsPublished(subscription.Culture) ? subscription.Culture : DefaultCulture;
 
 			if (!newsletter.IsPublished(culture))
 			{
+				skipped++;
 				continue;
 			}
 
@@ -58,30 +97,58 @@ public class NewsletterMailService(
 			{
 				var message = new EmailMessage(null, subscription.Email, subject, BuildHtml(subject, body, culture), isBodyHtml: true);
 				await emailSender.SendAsync(message, EmailType);
+				await MarkDeliveredAsync(newsletterKey, subscription.Id);
 				sent++;
 			}
 			catch (Exception ex)
 			{
 				// Ett mejl som inte går fram får inte stoppa resten
+				failed++;
 				logger.LogError(ex, "Kunde inte skicka nyhetsbrevet {Key} till prenumerant {Id}.", newsletterKey, subscription.Id);
 			}
 		}
 
-		logger.LogInformation("Nyhetsbrevet {Key} skickades till {Count} prenumeranter.", newsletterKey, sent);
+		logger.LogInformation("Nyhetsbrevet {Key}: {Sent} skickade, {Failed} misslyckade, {Skipped} överhoppade.",
+			newsletterKey, sent, failed, skipped);
 
-		return sent;
+		return new NewsletterSendResult(sent, failed, skipped);
 	}
 
-	private async Task<List<NewsletterSubscription>> GetSubscriptionsAsync()
+	// Bara de som inte redan har fått nyhetsbrevet, så att ett omkört jobb inte skickar två gånger
+	private async Task<List<NewsletterSubscription>> GetPendingSubscriptionsAsync(Guid newsletterKey)
 	{
 		using var scope = scopeProvider.CreateScope();
 
 		var subscriptions = await scope.ExecuteWithContextAsync(db =>
-			db.Subscriptions.AsNoTracking().OrderBy(x => x.Id).ToListAsync());
+			db.Subscriptions.AsNoTracking()
+				.Where(s => !db.Deliveries.Any(d => d.NewsletterKey == newsletterKey && d.SubscriptionId == s.Id))
+				.OrderBy(x => x.Id)
+				.ToListAsync());
 
 		scope.Complete();
 
 		return subscriptions;
+	}
+
+	private async Task MarkDeliveredAsync(Guid newsletterKey, int subscriptionId)
+	{
+		using var scope = scopeProvider.CreateScope();
+
+		await scope.ExecuteWithContextAsync<object?>(async db =>
+		{
+			db.Deliveries.Add(new NewsletterDelivery
+			{
+				NewsletterKey = newsletterKey,
+				SubscriptionId = subscriptionId,
+				SentUtc = timeProvider.GetUtcNow().UtcDateTime,
+			});
+
+			await db.SaveChangesAsync();
+
+			return null;
+		});
+
+		scope.Complete();
 	}
 
 	// Mejlprogram läser inte CSS-filer, så stilen står direkt på elementen, i sajtens färger
