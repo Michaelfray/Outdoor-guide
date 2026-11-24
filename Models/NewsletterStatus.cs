@@ -9,4 +9,6 @@ public static class NewsletterStatus
 	public const string Sent = "sent";
 	public const string Invalid = "invalid";
 	public const string Expired = "expired";
+
+	public const string Unsubscribed = "unsubscribed";
 }

@@ -59,6 +59,23 @@ public class NewsletterSurfaceController(
 		return RedirectBack(NewsletterStatus.Sent);
 	}
 
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+	public async Task<IActionResult> Unsubscribe(string? token)
+	{
+		await newsletterService.UnsubscribeAsync(token ?? string.Empty);
+
+		// Samma bekräftelse även om länken redan är använd, så att det går att trycka två gånger
+		var url = CurrentPage?.Url(PublishedUrlProvider, GetCulture(), UrlMode.Relative);
+
+		if (string.IsNullOrEmpty(url) || !Url.IsLocalUrl(url))
+		{
+			url = "/";
+		}
+
+		return LocalRedirect($"{url}?{NewsletterStatus.QueryKey}={NewsletterStatus.Unsubscribed}");
+	}
+
 	private IActionResult KeepInputAndRedirect(string status)
 	{
 		string? Field(string name) => Request.HasFormContentType ? Request.Form[name].ToString() : null;
