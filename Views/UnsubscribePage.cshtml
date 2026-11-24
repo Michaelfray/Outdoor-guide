@@ -1,0 +1,32 @@
+﻿@using OutdoorGuide.Controllers
+@using OutdoorGuide.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<UnsubscribePageViewModel>
+@{
+	Layout = "root.cshtml";
+
+	string Text(string key, string defaultValue) => Umbraco.GetDictionaryValueOrDefault(key, defaultValue);
+}
+
+@* Avsluta nyhetsbrevet (OUT-118). Länken i mejlet visar en knapp, så att program som öppnar länkar i förväg inte avregistrerar någon *@
+<header class="place-header">
+	<h1>@Model.Content.Name</h1>
+
+	@if (Model.Unsubscribed)
+	{
+		<p class="place-intro" role="status">@Text("Newsletter.Unsubscribed", "Done! Your email address has been deleted, and you won't get any more newsletters.")</p>
+	}
+	else if (Model.Token.Length == 0)
+	{
+		<p class="place-intro">@Text("Newsletter.UnsubscribeTokenMissing", "The link is not complete. Use the link at the bottom of the newsletter.")</p>
+	}
+	else
+	{
+		<p class="place-intro">@Text("Newsletter.UnsubscribeQuestion", "Do you want to stop getting the newsletter? Press the button and we will delete your email address.")</p>
+
+		using (Html.BeginUmbracoForm<NewsletterSurfaceController>(nameof(NewsletterSurfaceController.Unsubscribe)))
+		{
+			<input type="hidden" name="token" value="@Model.Token" />
+			<button type="submit" class="trail-filter-submit">@Text("Newsletter.UnsubscribeButton", "Unsubscribe")</button>
+		}
+	}
+</header>
