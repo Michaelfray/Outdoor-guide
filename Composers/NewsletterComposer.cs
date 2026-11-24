@@ -6,6 +6,8 @@ using OutdoorGuide.Business.Notifications;
 using OutdoorGuide.Business.Services;
 using OutdoorGuide.Business.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using OutdoorGuide.Business.Jobs.Interfaces;
+using OutdoorGuide.Business.Jobs;
 
 namespace OutdoorGuide.Composers;
 
@@ -21,5 +23,7 @@ public class NewsletterComposer : IComposer
         builder.Services.TryAddSingleton(TimeProvider.System);
         builder.Services.AddScoped<INewsletterService, NewsletterService>();
         builder.Services.AddScoped<INewsletterMailService, NewsletterMailService>();
+		builder.Services.AddScoped<INewsletterJob, NewsletterJob>();
+        builder.AddNotificationAsyncHandler<ContentPublishedNotification, NewsletterPublishedHandler>();
 	}
 }

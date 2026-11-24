@@ -17,6 +17,49 @@ namespace OutdoorGuide.Business.Data.Migrations.Newsletter
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
 
+            modelBuilder.Entity("OutdoorGuide.Models.NewsletterDelivery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("NewsletterKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SentUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SubscriptionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsletterKey", "SubscriptionId")
+                        .IsUnique();
+
+                    b.ToTable("newsletterDelivery", (string)null);
+                });
+
+            modelBuilder.Entity("OutdoorGuide.Models.NewsletterSend", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("NewsletterKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("QueuedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsletterKey")
+                        .IsUnique();
+
+                    b.ToTable("newsletterSend", (string)null);
+                });
+
             modelBuilder.Entity("OutdoorGuide.Models.NewsletterSubscription", b =>
                 {
                     b.Property<int>("Id")
