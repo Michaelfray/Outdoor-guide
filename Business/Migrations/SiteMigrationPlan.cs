@@ -79,7 +79,10 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddSiteContent>("add-site-content-3")
                 .To<AddCategoryTrails>("add-category-trails")
                 .To<AddSearchResultDictionaryItems>("add-search-result-dictionary-items")
-                .To<AddNewsletterType>("add-newsletter-type");
+                .To<AddNewsletterType>("add-newsletter-type")
+                .To<AddUnsubscribePage>("add-unsubscribe-page")
+                .To<AddUnsubscribeDictionaryItems>("add-unsubscribe-dictionary-items")
+                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text");
         }
     }
 }
