@@ -29,6 +29,14 @@
 	var location = string.Join(", ", new[] { municipality?.Name, region?.Name }.Where(x => !string.IsNullOrEmpty(x)));
 
 	var description = trail.Description?.ToString();
+
+	
+	// Kartan (OUT-108): koordinaterna med punkt som decimaltecken, oavsett vilket språk sidan har
+	var hasCoordinates = trail.Latitude != 0 && trail.Longitude != 0;
+	var coordinates = FormattableString.Invariant($"{trail.Latitude},{trail.Longitude}");
+	var mapLanguage = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+	var mapEmbedUrl = $"https://www.google.com/maps?q={coordinates}&z=13&hl={mapLanguage}&output=embed";
+	var mapLinkUrl = $"https://www.google.com/maps/search/?api=1&query={coordinates}";
 }
 
 <nav class="trail-breadcrumbs" aria-label="@Text("Trail.Breadcrumbs", "Breadcrumbs")">
@@ -84,11 +92,39 @@
 			@await Html.GetBlockListHtmlAsync(trail.Blocks)
 		</section>
 
-		@* Not built yet, so it is shown greyed out *@
-		<section class="trail-card trail-coming-soon trail-map" aria-labelledby="trail-map-heading">
-			<h2 id="trail-map-heading">@Text("Trail.Map", "Map")</h2>
-			<p class="trail-coming-soon__text">@Text("Trail.ComingSoon", "Coming soon")</p>
-		</section>
+		@* Kartan från Google Maps sätter cookies. Den kräver "Godkänn alla", och även då hämtas den först när besökaren
+		   trycker på knappen, så att inget hämtas från Google bara för att sidan öppnas (OUT-108) *@
+		@if (hasCoordinates)
+		{
+			<section class="trail-card trail-map" aria-labelledby="trail-map-heading">
+				<h2 id="trail-map-heading">@Text("Trail.Map", "Map")</h2>
+
+				@if (CookieConsent.AcceptsAll(Context.Request))
+				{
+					<div class="trail-map-consent" data-map-placeholder>
+						<p>@Text("Trail.MapLoadText", "The map comes from Google Maps. Press the button to load it.")</p>
+						<button type="button" class="cookie-consent-button cookie-consent-button-primary" data-load-map
+								data-map-src="@mapEmbedUrl"
+								data-map-title="@string.Format(Text("Trail.MapTitle", "Map of {0}"), trail.Name)">
+							@Text("Trail.MapLoadButton", "Show map")
+						</button>
+					</div>
+				}
+				else
+				{
+					<div class="trail-map-consent" data-requires-consent>
+						<p>@Text("Trail.MapConsentText", "The map comes from Google Maps, which sets cookies. You need to accept all cookies to show it.")</p>
+						@* <button type="button" class="cookie-consent-button cookie-consent-button-primary" data-open-cookie-settings>
+							@Text("Trail.MapConsentButton", "Change cookie settings")
+						</button> *@
+					</div>
+				}
+
+				<p class="trail-map-link">
+					<a href="@mapLinkUrl">@Text("Trail.MapOpenLink", "Open in Google Maps")</a>
+				</p>
+			</section>
+		}
 
 		@await Html.PartialAsync("trailRating", Model)
 
@@ -106,3 +142,38 @@
 		</section>
 	</aside>
 </div>
+
+
+<script>
+	// Knappen "Ändra cookie-inställningar" visar cookie-rutan, som "Cookie-inställningar" i sidfoten (OUT-108)
+	document.querySelectorAll('[data-open-cookie-settings]').forEach(function (button) {
+		button.addEventListener('click', function () {
+			// Syns rutan redan, flytta fokus dit i stället för att ladda om sidan
+			var box = document.getElementById('cookie-consent');
+
+			if (box) {
+				box.querySelector('[data-consent="@CookieConsent.All"]').focus();
+				return;
+			}
+
+			document.getElementById('cookie-settings').click();
+		});
+	});
+
+	// Knappen "Visa kartan" lägger in kartan först nu, så att inget hämtas från Google innan besökaren vill (OUT-108)
+	document.querySelectorAll('[data-load-map]').forEach(function (button) {
+		button.addEventListener('click', function () {
+			var map = document.createElement('iframe');
+			map.className = 'trail-map-frame';
+			map.src = button.dataset.mapSrc;
+			map.title = button.dataset.mapTitle;
+			map.referrerPolicy = 'no-referrer-when-downgrade';
+			map.allowFullscreen = true;
+
+			button.closest('[data-map-placeholder]').replaceWith(map);
+
+			// Knappen som hade fokus är borta, så flytta fokus till kartan
+			map.focus();
+		});
+	});
+</script>

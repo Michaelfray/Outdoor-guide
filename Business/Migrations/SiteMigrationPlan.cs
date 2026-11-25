@@ -91,7 +91,13 @@ namespace OutdoorGuide.Business.Migrations
                 .To<AddNewsletterType>("add-newsletter-type-2")
                 .To<AddUnsubscribePage>("add-unsubscribe-page-2")
                 .To<AddUnsubscribeDictionaryItems>("add-unsubscribe-dictionary-items-2")
-                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text-2");
+                .To<AddPrivacyUnsubscribeText>("add-privacy-unsubscribe-text-2")
+                .To<AddTrailMapDictionaryItems>("add-trail-map-dictionary-items")
+                .To<AddPrivacyMapText>("add-privacy-map-text")
+                // För den som testade OUT-108 innan OUT-107 kom in i main: kör startsidans steg en gång till.
+                // Stegen kollar vad som redan finns, så för alla andra gör de ingenting
+                .To<AddStartPageTitle>("add-start-page-title-2")
+                .To<AddStartHeroDictionaryItems>("add-start-hero-dictionary-items-2");
         }
     }
 }

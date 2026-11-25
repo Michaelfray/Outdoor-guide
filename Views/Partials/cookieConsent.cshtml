@@ -49,7 +49,12 @@
 			var secure = location.protocol === 'https:' ? '; Secure' : '';
 			document.cookie = '@CookieConsent.CookieName=' + choice.dataset.consent
 				+ '; Max-Age=31536000; Path=/; SameSite=Lax' + secure;
-
+			
+			// Ledsidans karta laddas bara efter "Godkänn alla", så ladda om sidan när den väntar på valet (OUT-108)
+			if (choice.dataset.consent === '@CookieConsent.All' && document.querySelector('[data-requires-consent]')) {
+				location.reload();
+				return;
+			}
 			box.remove();
 
 			// Fokus fanns på knappen som nu är borta, så flytta det till sidans innehåll i stället för till ingenting
