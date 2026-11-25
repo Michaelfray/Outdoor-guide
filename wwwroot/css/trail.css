@@ -472,3 +472,38 @@
     transform: none;
   }
 }
+
+
+/* ---------- Kartan (OUT-108) ---------- */
+
+.trail-map-frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* Rutan som visas i stället för kartan tills besökaren har godkänt alla cookies */
+.trail-map-consent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 240px;
+  padding: 24px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 8px;
+  background: var(--color-divider);
+  text-align: center;
+}
+
+.trail-map-consent p {
+  max-width: 40ch;
+  margin: 0;
+}
+
+.trail-map-link {
+  margin: 12px 0 0;
+}
