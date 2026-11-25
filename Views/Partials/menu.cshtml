@@ -82,7 +82,7 @@
                                             <ul class="list-unstyled mb-0">
 
                                                 @* Level 3: the pages under each activity, e.g. Dagsturer. Pages without trails are hidden *@
-                                                @foreach (var category in activity.Children().OfType<TrailCategory>().Where(category => category.HasTrails()))
+                                                @foreach (var category in activity.Children().OfType<TrailCategory>().Where(trailCategory => trailCategory.HasTrails()))
                                                 {
                                                     var isCategoryCurrent = IsCurrent(category);
 
