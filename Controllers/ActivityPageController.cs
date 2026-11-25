@@ -16,7 +16,8 @@ namespace OutdoorGuide.Controllers
         protected override ActivityPageViewModel Build(ActivityPage page)
         {
             var categories = page.Children<TrailCategory>()?
-                .Where(category => category.IsPublished())
+                // Undersidor utan leder, som Flerdagsturer, visas inte
+                .Where(category => category.IsPublished() && category.HasTrails())
                 .Select(category => CategoryCard.For(category, page.Activity))
                 .ToList() ?? [];
 

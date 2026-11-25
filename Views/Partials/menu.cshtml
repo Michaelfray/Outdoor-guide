@@ -81,8 +81,8 @@
                                             <a class="site-megamenu-heading" href="@activity.Url()">@activity.Name</a>
                                             <ul class="list-unstyled mb-0">
 
-                                                @* Level 3: the pages under each activity, e.g. Dagsturer *@
-                                                @foreach (var category in activity.Children().OfType<TrailCategory>())
+                                                @* Level 3: the pages under each activity, e.g. Dagsturer. Pages without trails are hidden *@
+                                                @foreach (var category in activity.Children().OfType<TrailCategory>().Where(trailCategory => trailCategory.HasTrails()))
                                                 {
                                                     var isCategoryCurrent = IsCurrent(category);
 
